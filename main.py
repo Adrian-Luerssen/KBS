@@ -9,10 +9,10 @@ import nltk
 # from nltk.stem import PorterStemmer, LancasterStemmer, WordNetLemmatizer, SnowballStemmer
 # from nltk.corpus import stopwords
 
-# import pandas as pd
+import pandas as pd
 
-# import sklearn
-# from sklearn.feature_extraction.text import CountVectorizer
+import sklearn
+from sklearn.feature_extraction.text import CountVectorizer
 
 # import sklearn
 # from sklearn import datasets, metrics, feature_extraction
@@ -27,12 +27,31 @@ import nltk
 # import seaborn as sns
 # import scipy
 
-nltk.download('punktl')
+#nltk.download('punktl')
 
 
 def tokenize (string):
     return nltk.word_tokenize(string)
 
+def updateVocab ():
+    vectorizer = sklearn.feature_extraction.text.CountVectorizer()
+    sentences = []
+    with open("data/testPhrases.txt") as file:
+        sentences.append(tokenize(file.read()))
+        
+    vectorizer.fit(sentences)
+    return vectorizer
+        
+    
+    
+    
+string = "hello how are you? 7pm"#input("enter a sentence: ")
+tokens = tokenize(string)
+print (tokens)
 
-string = input("enter a sentence: ")
-print(tokenize(string))
+#print(pd.get_dummies(tokens))
+
+
+print(updateVocab().vocabulary_)
+
+
