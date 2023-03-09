@@ -8,6 +8,7 @@ Created on Wed Mar  8 23:25:39 2023
 import nltk
 # from nltk.stem import PorterStemmer, LancasterStemmer, WordNetLemmatizer, SnowballStemmer
 from nltk.corpus import stopwords
+from nltk.tokenize import RegexpTokenizer
 
 import pandas as pd
 
@@ -34,7 +35,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 
 def preProcessing (string):
     stop_words = set(stopwords.words('english'))
-    tokens = nltk.word_tokenize(string)
+    tokenizer = RegexpTokenizer(r'\w+')
+    tokens = tokenizer.tokenize(string)
     tokens = [w for w in tokens if not w.lower() in stop_words]
             
     return tokens
@@ -42,8 +44,10 @@ def preProcessing (string):
 def updateVocab ():
     vectorizer = sklearn.feature_extraction.text.CountVectorizer()
     sentences = []
-    with open("data/testPhrases.txt") as file:
-        sentences.append(file.read())
+    with open("data/testPhrases.txt") as f:
+        lines = [line.rstrip() for line in f]
+    for line in lines:
+        sentences.append(' '.join([str(elem) for elem in preProcessing(line)]))
         
     vectorizer.fit(sentences)
     return vectorizer
@@ -63,9 +67,13 @@ string = "when is the next 2h gap i have?"#input("enter a sentence: ")
 tokens = preProcessing(string)
 print (tokens)
 
+with open("data/testPhrases.txt") as f:
+    lines = [line.rstrip() for line in f]
+for line in lines:
+    print(preProcessing(line))
 #print(pd.get_dummies(tokens))
 
 
-#print(updateVocab().vocabulary_)
+print(updateVocab().vocabulary_)
 
 

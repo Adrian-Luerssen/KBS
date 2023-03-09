@@ -1,4 +1,133 @@
-What deadlines do i have this week?
-What is the closest deadline?
-what do i have to do today?
+Can you add a new note to my task "schedule training"?
 add KBS class to my calendar for tomorrow from 6pm to 7pm
+Can you schedule a meeting with the finance team for next Tuesday?
+Can you show me my todo list for next week?
+Can you update the due date of my task "order supplies" to next Wednesday?
+Can you move my appointment with the doctor to a different time?
+Can you cancel all of my tasks related to the hiring process?
+Can you show me my todo list for the next 3 days?
+Can you show me my todo list for the entire month?
+Reschedule my meeting with the client to next Friday.
+Remind me to complete my "Project Proposal" task by the end of the day.
+Can you add a new task to my list called "write report"?
+Can you show me my todo list for the next 6 months?
+Can you remind me about my performance review meeting?
+Can you move my appointment with the dentist to a different day?
+Show me my calendar for the next three months.
+Can you add an appointment for me on Friday at 3 pm?
+Add a note to my "Performance Review" task.
+Update the due date of my "Proposal Submission" task to tomorrow.
+Can you set a reminder for me to renew my license next month?
+Can you add a note to my meeting with the HR department?
+What's the location of my appointment with Sarah?
+Can you show me my calendar for next month?
+Can you add a reminder for me to submit my expense report by Friday?
+Can you delete my meeting with Tom?
+Can you show me my calendar for the next 5 years?
+Can you cancel all of my appointments for next week?
+Can you reschedule my task "attend meeting" to next Tuesday?
+Can you add "buy groceries" to my todo list?
+Take a note on my meeting with the team regarding the new project.
+Can you remind me to review my project budget tomorrow?
+Can you schedule a meeting with the CEO for tomorrow?
+Can you update the due date of my task "send email" to Friday?
+What's on my calendar for next week?
+Can you cancel all of my appointments for the next 2 weeks?
+Can you remind me about my upcoming vacation days?
+Can you move my appointment with Peter to next Tuesday?
+Can you show me the status of my project tasks?
+Can you add a note to all of my tasks related to the project?
+Can you add a new note to all of my tasks related to the annual report?
+Can you cancel all of my tasks related to the marketing campaign?
+Can you remind me to call Jane at 2 pm?
+Can you remind me to submit my performance report by the end of the month?
+Can you show me the progress of my task "create presentation"?
+Can you show me my calendar for the next year?
+What deadlines do i have this week?
+What's on my calendar for today?
+Can you set a reminder for me to follow up with my client next week?
+Can you schedule a meeting with the design team for next Wednesday?
+Move my "Marketing Strategy" meeting to a different time.
+Can you reschedule my meeting with the sales team to next Thursday?
+What's on my todo list for today?
+Can you show me my calendar for the next 6 months?
+Can you create a new task for me called "book flight"?
+Change the date of my "Budget Review" meeting to next Thursday.
+Create a new task called "Recruit new team member".
+Can you cancel all of my appointments for the next month?
+Can you create a new task for me called "review budget"?
+Can you update the start time of my meeting with the project manager to 10 am?
+Can you show me my todo list for the weekend?
+Can you add a new task to my list called "research competitors"?
+Schedule a meeting with the Design team for next Wednesday.
+Can you delete all of my appointments for the rest of the day?
+Cancel all my appointments related to the "Client Visit" project.
+Can you schedule a meeting with the customer support team for next Friday?
+Modify the time of my "Product Training" session.
+Schedule a meeting with the Sales team for next Monday.
+What do I need to do for tomorrow?
+Can you update the due date of my task "submit report" to next Friday?
+Can you cancel my vacation days for next month?
+Can you schedule a meeting with the CEO for next Thursday?
+Show me the status of my "Team Performance" project.
+Can you show me my calendar for the next quarter?
+Can you reschedule my meeting with the vendor to next month?
+Can you show me all of my tasks that are overdue?
+Remind me about my "Product Demo" presentation next week.
+Can you add a note to my task "call client"?
+What is the closest deadline?
+Can you update the description of my task "research new software"?
+Can you remind me about my training session tomorrow?
+Can you add a new note to my task "send proposal"?
+Can you show me the details of my task "prepare presentation"?
+Can you show me my todo list for the next month?
+Can you mark "finish report" as complete on my todo list?
+Can you show me my todo list for the next 4 days?
+Can you create a reminder for me to attend the conference next week?
+Can you update the start time of my appointment with Bob to 2 pm?
+Can you show me my upcoming deadlines?
+Can you add a new note to all of my tasks related to the product launch?
+Cancel all of my appointments for tomorrow.
+Can you add a new task to my list called "create budget proposal"?
+Can you reschedule my meeting with the investor to next week?
+Can you update the location of my meeting with Jack to the conference room?
+What are my appointments for the week?
+Can you add a new task to my list called "prepare presentation for conference"?
+Can you set a reminder for me to pay my bills on the 15th of this month?
+Can you add a new task to my list called "organize company event"?
+Can you reschedule my meeting with the procurement team to next week?
+Can you schedule a meeting with the IT department for next Monday?
+Can you show me my completed tasks for the week?
+Can you schedule a meeting with the marketing team for next week?
+What are my tasks for the next two weeks?
+Can you remind me about my team building event next week?
+What's my todo list for tomorrow?
+Can you move my meeting with John to next week?
+Create a new task called "Review Employee Benefits".
+what do i have to do today?
+Can you show me my calendar for the next 10 years?
+Can you add a new task to my list called "buy a new car"?
+Can you remind me about my upcoming deadline for "submit proposal"?
+Can you remind me about my monthly team meeting?
+Can you move my appointment with the therapist to a different day?
+Add a new task to my list: "Research competitors' pricing strategy."
+Can you reschedule my meeting with the project team to next week?
+Add a note to all my "Team Meeting" tasks.
+Can you show me my calendar for next week?
+Can you move my meeting with the client to a different location?
+Update the description of my "Weekly Standup" task.
+Can you add a new task to my list called "organize files"?
+Can you add a new task to my list called "paint the house"?
+Schedule a meeting with the HR department for next Wednesday.
+Can you reschedule my meeting with the legal team to next month?
+What's the status of my project?
+Set a reminder to follow up with the supplier next week.
+Can you update the due date of my task "submit application" to next Monday?
+Can you update the location of my meeting with the supplier to their office?
+Can you show me my todo list for the next 2 weeks?
+Revise the due date of my "Product Launch" task to next month.
+Cancel my "Lunch Meeting" appointment for next Friday.
+Can you cancel my appointment with David?
+Can you move my appointment with the contractor to a different time?
+Show me the status of all my incomplete tasks.
+Postpone the due date of my "Market Research" task to next week.
