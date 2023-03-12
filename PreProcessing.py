@@ -10,6 +10,8 @@ from nltk.stem import PorterStemmer, LancasterStemmer, WordNetLemmatizer, Snowba
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
 
+nltk.download('stopwords')
+
 def preProcessing (string):
     stop_words = set(stopwords.words('english'))
     tokenizer = RegexpTokenizer(r'\w+')

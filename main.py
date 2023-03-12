@@ -7,9 +7,7 @@ Created on Wed Mar  8 23:25:39 2023
 
 import random as r
 
-import pandas as pd
-import sklearn
-from sklearn.feature_extraction.text import CountVectorizer
+
 from datetime import datetime
 
 import Event
