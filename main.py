@@ -49,13 +49,13 @@ def examplesTest():
 def mainExecute():
     print("This is the KBS Event Chatbot, at your disposal.")
     print("The current date is Sunday, 18th of March.")
-    print("How can I help you?")
+    print("How can I help you?\n")
     
     value = True
     while (value):
-        string = input()
+        string = input("In: ")
         if string == 'Bye' or string == 'bye': value = False
-        else: print("out: ", prep.generateResponse(string))
+        else: print("Out: ", prep.generateResponse(string), "\n")
         
 #string = "Can you schedule an event for tomorrow at 2pm"#input("enter a sentence: ")
 #tokens = prep.preProcessing(string)
@@ -65,7 +65,7 @@ def mainExecute():
 #tokens = prep.preProcessing(string)
 #print (tokens)
 
-examplesTest()
+#examplesTest()
 mainExecute()
 
 

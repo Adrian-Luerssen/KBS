@@ -40,8 +40,8 @@ def searchOptions(tokens):                 #Searches for words
     if (len(a) != 0): return 5
 
     addString = ['add', 'put', 'attach', 'create', 'schedule', 'generate', 'produce', 'design', 'make']
-    cancelString = ['cancel', 'abandon', 'scrap', 'drop', 'delete', 'remove', 'radicate', 'exterminate', 'suspend']
-    showString = ['show', 'manifest', 'display', 'appear', 'reveal', 'indicate', 'present']
+    cancelString = ['cancel', 'abandon', 'eliminate', 'drop', 'delete', 'remove', 'eradicate', 'exterminate', 'suspend']
+    showString = ['show', 'manifest', 'display', 'appear', 'reveal', 'indicate', 'present', 'search', 'open']
     rescheduleString = ['reschedule', 'postpone', 'rearrange']
     updateString = ['update', 'renovate', 'recondition', 'swap', 'change', 'move']
 
@@ -90,7 +90,7 @@ def menuOptions(tokens):           #This will execute the functions of Event, up
 
 def generateResponse(sentence):
     tokens = preProcessing(sentence)
-    menuOptions(tokens)      #Does the action to the event                                       
+    #menuOptions(tokens)      #Does the action to the event                                       
     responses = {0:'I will add this task to your schedule ',
                  1:'This event has been canceled ',
                  2:'Here are the events you have',
