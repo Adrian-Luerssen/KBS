@@ -4,6 +4,7 @@ Created on Sun Mar 12 17:06:39 2023
 @author: Sergi Vives
 """
 
+import Processing as pro
 import nltk
 from nltk.stem import PorterStemmer, LancasterStemmer, WordNetLemmatizer, SnowballStemmer
 from nltk.corpus import stopwords
@@ -75,7 +76,7 @@ def searchOptions(tokens):                 #Searches for words
 def menuOptions(tokens):           #This will execute the functions of Event, update the DB
     value = searchOptions(tokens)
     if value == 0:
-        print("add")
+        pro.createEvent(tokens)
     elif value == 1:
         print("cancel")
     elif value == 2:
@@ -89,8 +90,7 @@ def menuOptions(tokens):           #This will execute the functions of Event, up
 
 
 def generateResponse(sentence):
-    tokens = preProcessing(sentence)
-    #menuOptions(tokens)      #Does the action to the event                                       
+    tokens = preProcessing(sentence)                                     
     responses = {0:'I will add this task to your schedule ',
                  1:'This event has been canceled ',
                  2:'Here are the events you have',
@@ -98,6 +98,8 @@ def generateResponse(sentence):
                  4:'I have updated your calendar',
                  5:'I dont know how to respond'}
 
-    value = searchOptions(tokens)
-    return responses[value]
     
+    menuOptions(tokens)      #Does the action to the event  
+    
+    value = searchOptions(tokens)
+    print("Out: ", responses[value], "\n")

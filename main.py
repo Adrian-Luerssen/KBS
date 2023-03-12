@@ -10,6 +10,7 @@ import random as r
 import pandas as pd
 import sklearn
 from sklearn.feature_extraction.text import CountVectorizer
+from datetime import datetime
 
 import Event
 import PreProcessing as prep
@@ -48,14 +49,15 @@ def examplesTest():
 
 def mainExecute():
     print("This is the KBS Event Chatbot, at your disposal.")
-    print("The current date is Sunday, 18th of March.")
+    print("The current date is: ", datetime.now().strftime('%A'),",", datetime.now().day,
+            datetime.now().strftime('%B'), datetime.now().hour, ":", datetime.now().minute)
     print("How can I help you?\n")
     
     value = True
     while (value):
         string = input("In: ")
         if string == 'Bye' or string == 'bye': value = False
-        else: print("Out: ", prep.generateResponse(string), "\n")
+        else: prep.generateResponse(string)
         
 #string = "Can you schedule an event for tomorrow at 2pm"#input("enter a sentence: ")
 #tokens = prep.preProcessing(string)
