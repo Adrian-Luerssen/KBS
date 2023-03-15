@@ -53,7 +53,9 @@ class DAO:
                         self.categories[cat] = []
                     self.categories[cat].append(carString)
 
-
+                #TODO:
+                #cars of the same make, model, style can have different fuel types, transmission types, and traction types.
+                # find a way to represent this in the cars dictionary. This will allow us to filter a lot.
 
 
 
