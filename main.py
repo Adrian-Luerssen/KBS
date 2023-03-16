@@ -10,9 +10,8 @@ import random as r
 
 from datetime import datetime
 
-import Event
 import PreProcessing as prep
-
+import User
 
 
 
@@ -51,11 +50,13 @@ def mainExecute():
             datetime.now().strftime('%B'), datetime.now().hour, ":", datetime.now().minute)
     print("How can I help you?\n")
     
+    user = User.User()
+
     value = True
     while (value):
         string = input("In: ")
         if string == 'Bye' or string == 'bye': value = False
-        else: prep.generateResponse(string)
+        else: prep.generateResponse(string, user)
         
 #string = "Can you schedule an event for tomorrow at 2pm"#input("enter a sentence: ")
 #tokens = prep.preProcessing(string)
