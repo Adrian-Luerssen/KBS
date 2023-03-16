@@ -1,93 +1,50 @@
 class DAO:
 
     def __init__(self, datapath):
+        self.cars_test = None
         self.path = datapath
-        self.cars = {}
-        self.manufacturers = {}
-        self.categories = {}
-        self.styles = {}
-        self.fuelTypes = {}
-        self.transmissionTypes = {}
 
     def readData(self):
-        # Make	Model	Year	Engine Fuel Type	Engine HP	Engine Cylinders	Transmission Type	Driven_Wheels	Number of Doors	Market Category	Vehicle Size	Vehicle Style	highway MPG	city mpg	Popularity	MSRP
+        import pandas as pd
+        # Make	Model	Year	Fuel Type	HP	Cylinders	Transmission Type	Driven_Wheels	Number of Doors	Market Category	Vehicle Size	Vehicle Style	highway MPG	city mpg	Popularity	MSRP
 
-        cars = []
-        with open(self.path) as file:
-            line = file.readline()
-            while True:
-                line = file.readline()
-
-                # print("line: "+ line)
-                if not line:
-                    break
-
-                #remove \n
-                line = line[:-1]
-                split = line.split(",")
-                for i in range(len(split)):
-                    split[i] = split[i].lower()
-                #turn split 9 into a list
-                split[9] = split[9].split(";")
-                ##all to lower case
-
-                carString = split[0] + " " + split[1] + " " + split[11]
-                if carString not in self.cars:
-                    self.cars[carString] = split
-                else:
-                    # keep the newest car
-                    if int(self.cars[carString][2]) < int(split[2]):
-                        self.cars[carString] = split
+        pd.set_option('display.max_columns', 5000)
+        pd.set_option('display.max_row', 100000)
+        pd.max_columns = 1000
+        cars_test = pd.read_csv(self.path)
+        # print(cars_test[cars_test["Year"] == 2017])
+        # print all cars from 2017 that are automatic
+        # print(cars_test[(cars_test["Transmission Type"] == "AUTOMATIC") & (cars_test["Make"] == "Volvo") & (cars_test["Model"] == "V60")])
+        # print(cars_test.describe())
+        # print(cars_test.groupby(["Make", "Model", "Engine Fuel Type", "Transmission Type", ])["Year"].max())
+        cars_test = cars_test.groupby(
+            ["Make", "Model", "Fuel Type", "HP", "Transmission", "Driven_Wheels", "Doors", "Market Category", "Size",
+             "Style", "highway MPG", "city MPG", "Popularity", "Price"])["Year"].max()
+        cars_test = cars_test.reset_index()
+        cars_test = cars_test.groupby(
+            ["Make", "Model", "Fuel Type", "HP", "Transmission", "Driven_Wheels", "Doors", "Market Category", "Size",
+             "Style", "highway MPG", "city MPG", "Popularity", "Year"])["Price"].max()
+        # print(cars_test_clean[cars_test_clean["Transmission Type"] == "MANUAL"])
+        cars_test_clean = cars_test.reset_index()
+        print(cars_test_clean[cars_test_clean["Make"] == "Maserati"]["Model"])
+        # show all cars from 2017 that are automatic
+        # print(cars_test_clean[cars_test_clean["Year"] == 2017])
+        # TODO: do dao.search()
 
 
-                if split[0] not in self.manufacturers:
-                    self.manufacturers[split[0]] = {}
-
-                if split[1] not in self.manufacturers[split[0]]:
-                    self.manufacturers[split[0]][split[1]] = []
-                if split[11] not in self.manufacturers[split[0]][split[1]]:
-                    self.manufacturers[split[0]][split[1]].append(split[11])
-
-                for cat in split[9]:
-                    if cat not in self.categories:
-                        self.categories[cat] = []
-                    self.categories[cat].append(carString)
-
-                #TODO:
-                #cars of the same make, model, style can have different fuel types, transmission types, and traction types.
-                # find a way to represent this in the cars dictionary. This will allow us to filter a lot.
-
-
-
-                if split[11] not in self.styles:
-                    self.styles[split[11]] = []
-                self.styles[split[11]].append(carString)
-                if split[3] not in self.fuelTypes:
-                    self.fuelTypes[split[3]] = []
-                self.fuelTypes[split[3]].append(carString)
-                cars.append(line.split(","))
-                if split[6] not in self.transmissionTypes:
-                    self.transmissionTypes[split[6]] = []
-                self.transmissionTypes[split[6]].append(carString)
-
-
-        self.data = cars
-
-    def search(self, make):
-        make = make.lower()
-        #print(self.manufacturers["BMW"]["1 Series M"])
-        #print(self.cars)
-        for model in self.manufacturers[make]:
-            for style in self.manufacturers[make][model]:
-                carString = make+" "+ model + " " + style
-                print(carString + " : "+ str(self.cars[carString]))
-            print()
-        #print(self.cars["BMW 1 Series M Coupe"])
-        #print(self.categories)
-        #print(self.styles)
-        #print(self.fuelTypes)
+    #declare a function called "search" which takes a string as a parameter and outputs all the cars that match the search term
+    def search(self, searchTerm):
+        print("searching for: ", searchTerm)
+        print(self.cars_test[self.cars_test["Make"] == searchTerm])
 
 
 dao = DAO("data/data.csv")
 dao.readData()
-dao.search("Bugatti")
+# dao.search("Bugatti")
+
+print("Search term: ")
+userInput = input()
+while userInput != "exit":
+    # dao.search(userInput)
+    print("Search term: ")
+    userInput = input()
