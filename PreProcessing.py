@@ -25,6 +25,8 @@ def preProcessing (string):
     tokens = [w for w in tokens if not w.lower() in stop_words]
     #lancaster = LancasterStemmer()
     stemmed=[]
+
+    #TODO: Fix spelling mistakes on input
     for w in tokens:
         #stemmed.append(lancaster.stem(w))
         stemmed.append(w.lower())
