@@ -10,10 +10,15 @@ from nltk.stem import PorterStemmer, LancasterStemmer, WordNetLemmatizer, Snowba
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
 
-nltk.download('stopwords')
+#nltk.download('stopwords')
 
 def preProcessing (string):
     stop_words = set(stopwords.words('english'))
+    stop_words.remove('not')
+    stop_words.remove('no')
+    stop_words.remove('nor')
+    stop_words.remove('but')
+    stop_words.remove('against')
     tokenizer = RegexpTokenizer(r'\w+')
 
     tokens = tokenizer.tokenize(string)
