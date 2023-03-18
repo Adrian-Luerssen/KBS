@@ -134,5 +134,4 @@ class questions:
         # TODO Recommend system
 
 
-q = questions()
-q.ask_questions()
+
