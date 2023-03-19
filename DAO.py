@@ -6,7 +6,7 @@ class DAO:
 
     def readData(self):
         import pandas as pd
-        # Make	Model	Year	Fuel Type	HP	Cylinders	Transmission Type	Driven_Wheels	Number of Doors	Market Category	Vehicle Size	Vehicle Style	highway MPG	city mpg	Popularity	MSRP
+        # make  model	year	fuel_type	hp	cylinders	transmission	driven_wheels	doors	category	size	style	highway_mpg	city_mpg	popularity	price
 
         pd.set_option('display.max_columns', 5000)
         pd.set_option('display.max_row', 100000)
@@ -18,33 +18,98 @@ class DAO:
         # print(cars_test.describe())
         # print(cars_test.groupby(["Make", "Model", "Engine Fuel Type", "Transmission Type", ])["Year"].max())
         cars_test = cars_test.groupby(
-            ["Make", "Model", "Fuel Type", "HP", "Transmission", "Driven_Wheels", "Doors", "Market Category", "Size",
-             "Style", "highway MPG", "city MPG", "Popularity", "Price"])["Year"].max()
+            ["make", "model", "fuel_type", "hp", "transmission", "driven_wheels", "doors", "category", "size", "style",
+             "highway_mpg", "city_mpg", "popularity", "price"])["year"].max()
         cars_test = cars_test.reset_index()
         cars_test = cars_test.groupby(
-            ["Make", "Model", "Fuel Type", "HP", "Transmission", "Driven_Wheels", "Doors", "Market Category", "Size",
-             "Style", "highway MPG", "city MPG", "Popularity", "Year"])["Price"].max()
+            ["make", "model", "fuel_type", "hp", "transmission", "driven_wheels", "doors", "category", "size", "style",
+             "highway_mpg", "city_mpg", "popularity", "year"])["price"].max()
         # print(cars_test_clean[cars_test_clean["Transmission Type"] == "MANUAL"])
         cars_test_clean = cars_test.reset_index()
-        print(cars_test_clean[cars_test_clean["Make"] == "Maserati"]["Model"])
+        # print(cars_test_clean[cars_test_clean["Make"] == "Maserati"]["Market Category"])
+        self.cars_test = cars_test_clean
         # show all cars from 2017 that are automatic
         # print(cars_test_clean[cars_test_clean["Year"] == 2017])
-        # TODO: do dao.search()
 
 
-    #declare a function called "search" which takes a string as a parameter and outputs all the cars that match the search term
     def search(self, searchTerm):
         print("searching for: ", searchTerm)
-        print(self.cars_test[self.cars_test["Make"] == searchTerm])
+        matching_cars = self.cars_test[self.cars_test.applymap(lambda x: searchTerm.lower() in str(x).lower()).any(axis=1)]
+        if matching_cars.empty:
+            print("No matching cars found.")
+        else:
+            print("Matching cars:")
+            print(matching_cars)
+
+    def searchParameters(self, *search_terms):
+        print("searching for cars...")
+        matching_cars = self.cars_test
+
+        columns = ["make", "model", "fuel_type", "hp", "transmission", "driven_wheels", "doors", "category",
+                   "size", "style", "highway_mpg", "city_mpg", "popularity", "year", "price"]
+
+        for i, term in enumerate(search_terms):
+            if term.lower() != "any":
+                matching_cars = matching_cars[
+                    matching_cars[columns[i]].apply(lambda x: str(term).lower() in str(x).lower())]
+
+        if matching_cars.empty:
+            print("No matching cars found.")
+        else:
+            print("Matching cars:")
+            print(matching_cars)
+
+    def searchCarsByParameters(self, search_terms):
+        print("searching for cars...")
+        matching_cars = self.cars_test
+
+        for key, value in search_terms.items():
+            print("filtering by", key, ":", value)
+            if value.lower() != "any":
+                if key == "year":
+                    matching_cars = matching_cars[matching_cars[key] >= int(value)]
+                elif key == "price":
+                    matching_cars = matching_cars[matching_cars[key] <= int(value)]
+                elif key == "price_min":
+                    matching_cars = matching_cars[matching_cars["price"] >= int(value)]
+                elif key == "hp" or key == "highway_mpg" or key == "city_mpg" or key == "popularity" or key == "doors":
+                    matching_cars = matching_cars[matching_cars[key] >= int(value)]
+                # elif key == "cylinders":
+                    # matching_cars = matching_cars[matching_cars[key] >= int(value)] if user wants efficiency logic shouldn't provide more cylinders
+                else:
+                    matching_cars = matching_cars[matching_cars[key].apply(lambda x: str(value).lower() in str(x).lower())]
+                print("No matching cars found." if matching_cars.empty else ("Matching cars:", matching_cars))
+
+        # for key, value in term.items():
+                # if value.lower() != "any":
+                    # matching_cars = matching_cars[matching_cars[key].apply(lambda x: str(value).lower() in str(x).lower())]
+
+        # print(matching_cars["make"].apply(lambda x: userInput.lower() in str(x).lower()))
+
 
 
 dao = DAO("data/data.csv")
 dao.readData()
 # dao.search("Bugatti")
 
+
+
 print("Search term: ")
-userInput = input()
+# userInput = input()
+userInput = input().split(',')
+print(userInput)
+
+# TODO: accept ranges in all numeric input for search parameters
+# TODO: make categories array of strings instead of one string
+
+dao.searchCarsByParameters({"make": "porsche", "model": "any", "year": "1990", "price": "any", "city_mpg": "any"})
+
+# dao.searchParameters(*[term.strip() for term in userInput])
+# dao.search(userInput)
 while userInput != "exit":
     # dao.search(userInput)
     print("Search term: ")
-    userInput = input()
+    # userInput = input()
+    # dao.search(userInput)
+    userInput = input().split(',')
+    # dao.searchParameters(*[term.strip() for term in userInput])
