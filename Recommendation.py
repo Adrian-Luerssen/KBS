@@ -50,17 +50,24 @@ class questions:
 
     def obtainPriceRange(self, question, response):
         lst = []
+        print (response)
         #join thousand or k to the number
-        for pos in range(len(response)):
-            if re.search("[0-9]", response[pos]):
-                if re.search("thousand", response[pos+1]):
-                    response[pos] = response[pos]+"000"
-                elif re.search("k", response[pos+1]):
-                    response[pos] = response[pos]+"000"
+        pos = 0
+        while pos < len(response):
+            print (response)
+            if re.search("^[0-9]*$", response[pos]):
+                if "thousand" == response[pos+1]:
+                    response[pos] = response[pos]+"k"
+                    response = response[:pos+1] + response[pos+2:]
+                elif "k" == response[pos+1]:
+                    response[pos] = response[pos]+"k"
+                    response = response[:pos+1] + response[pos+2:]
+            pos+=1
 
+        print (response)
         for tok in response:
             if re.search("[0-9]k", tok) or re.search("[0-9]thousand", tok):
-                lst.append(tok.replace("k","").replace("thousand","")+"000")
+                lst.append(float(tok.replace("k","").replace("thousand",""))*1000)
             elif re.search("[0-9]", tok):
                 lst.append(tok)
 
