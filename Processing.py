@@ -1,8 +1,3 @@
-"""
-Created on Sun Mar 12 19:27:21 2023
-
-@author: Sergi Vives
-"""
 import PreProcessing as pre
 import User 
 import random as r
