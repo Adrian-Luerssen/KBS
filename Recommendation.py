@@ -147,7 +147,7 @@ class questions:
             if "fast" in response:
                 self.profile.limit["hp"] = "high"
                 self.profile.limit["category"] = "exotic,factory tuner,performance"
-            if "eco" or "friend" or "efficy" in response:
+            if ("eco" in response) or ("friend" in response) or ("efficy" in response):
                 self.profile.limit["mpg"] = "high"
             if "balanc" in response:
                 self.profile.limit["hp"] = "high"
@@ -282,7 +282,7 @@ class questions:
             return "environment"
 
         elif question == "environment":
-            if "efficy" or "friend" or "eco" or "bal" in response:
+            if ("efficy" in response) or ("friend" in response) or ("eco" in response) or ("bal" in response):
                 return "terrain"
             elif "fast" in response:
                 return "circuit"

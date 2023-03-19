@@ -95,8 +95,8 @@ class DAO:
                         matching_cars[key].apply(lambda x: str(x).lower() in str(value).lower())]
                     # matching_cars = [
                             # matching_cars[key].apply(lambda x: str(x).lower() in value.split(","))]
+            print("No matching cars found." if matching_cars.empty else ("Matching cars:", matching_cars.head(10)))
 
-                print("No matching cars found." if matching_cars.empty else ("Matching cars:", matching_cars.head(10)))
 
         # for key, value in term.items():
         # if value.lower() != "any":
