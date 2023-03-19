@@ -1,12 +1,12 @@
 import sklearn
+import nltk
 from nltk import LancasterStemmer
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
 
 import Processing as pro
 
-
-# nltk.download('stopwords')
+nltk.download('stopwords')
 
 def preProcessing(string):
     stop_words = set(stopwords.words('english'))

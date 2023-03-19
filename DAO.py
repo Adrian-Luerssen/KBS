@@ -64,16 +64,16 @@ class DAO:
         print(search_terms)
         for key, value in search_terms.items():
             print("filtering by", key, ":", value)
-            if value.lower() != "any":
+            if str(value).lower() != "any":
                 if key == "year":
                     matching_cars = matching_cars[matching_cars[key] >= int(value)]
                     matching_cars.sort_values(by=[key], ascending=False, inplace=True)
                 elif key == "price":
                     matching_cars = matching_cars[matching_cars[key] <= int(value)]
                     matching_cars.sort_values(by=[key], ascending=True, inplace=True)
-                elif key == "price_min":
+                elif key == "min_price":
                     matching_cars = matching_cars[matching_cars["price"] >= int(value)]
-                    matching_cars.sort_values(by=[key], ascending=True, inplace=True)
+                    matching_cars.sort_values(by=["price"], ascending=True, inplace=True)
                 elif key == "doors":
                     matching_cars = matching_cars[matching_cars[key] >= int(value)]
                 elif key == "hp" or key == "highway_mpg" or key == "city_mpg" or key == "popularity":
@@ -85,13 +85,16 @@ class DAO:
                 # elif key == "cylinders":
                 # matching_cars = matching_cars[matching_cars[key] >= int(value)] if user wants efficiency logic shouldn't provide more cylinders
                 else:
+                    print("here")
                     print(key, value)
+                    print (type(matching_cars))
+                    print(matching_cars["category"])
                     matching_cars = matching_cars[
                         matching_cars[key].apply(lambda x: str(x).lower() in str(value).lower())]
                     # matching_cars = [
                             # matching_cars[key].apply(lambda x: str(x).lower() in value.split(","))]
 
-                print("No matching cars found." if matching_cars.empty else ("Matching cars:", matching_cars))
+                print("No matching cars found." if matching_cars.empty else ("Matching cars:", matching_cars.head(10)))
 
         # for key, value in term.items():
         # if value.lower() != "any":
