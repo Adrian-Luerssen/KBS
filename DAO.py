@@ -1,4 +1,6 @@
 class DAO:
+    columns = ["make", "model", "fuel_type", "hp", "transmission", "driven_wheels", "doors", "category",
+               "size", "style", "highway_mpg", "city_mpg", "popularity", "year", "price"]
 
     def __init__(self, datapath):
         self.cars_test = None
@@ -31,10 +33,10 @@ class DAO:
         # show all cars from 2017 that are automatic
         # print(cars_test_clean[cars_test_clean["Year"] == 2017])
 
-
     def search(self, searchTerm):
         print("searching for: ", searchTerm)
-        matching_cars = self.cars_test[self.cars_test.applymap(lambda x: searchTerm.lower() in str(x).lower()).any(axis=1)]
+        matching_cars = self.cars_test[
+            self.cars_test.applymap(lambda x: searchTerm.lower() in str(x).lower()).any(axis=1)]
         if matching_cars.empty:
             print("No matching cars found.")
         else:
@@ -45,13 +47,10 @@ class DAO:
         print("searching for cars...")
         matching_cars = self.cars_test
 
-        columns = ["make", "model", "fuel_type", "hp", "transmission", "driven_wheels", "doors", "category",
-                   "size", "style", "highway_mpg", "city_mpg", "popularity", "year", "price"]
-
         for i, term in enumerate(search_terms):
             if term.lower() != "any":
                 matching_cars = matching_cars[
-                    matching_cars[columns[i]].apply(lambda x: str(term).lower() in str(x).lower())]
+                    matching_cars[self.columns[i]].apply(lambda x: str(term).lower() in str(x).lower())]
 
         if matching_cars.empty:
             print("No matching cars found.")
@@ -68,24 +67,36 @@ class DAO:
             if value.lower() != "any":
                 if key == "year":
                     matching_cars = matching_cars[matching_cars[key] >= int(value)]
+                    matching_cars.sort_values(by=[key], ascending=False, inplace=True)
                 elif key == "price":
                     matching_cars = matching_cars[matching_cars[key] <= int(value)]
+                    matching_cars.sort_values(by=[key], ascending=True, inplace=True)
                 elif key == "price_min":
                     matching_cars = matching_cars[matching_cars["price"] >= int(value)]
-                elif key == "hp" or key == "highway_mpg" or key == "city_mpg" or key == "popularity" or key == "doors":
+                    matching_cars.sort_values(by=[key], ascending=True, inplace=True)
+                elif key == "doors":
                     matching_cars = matching_cars[matching_cars[key] >= int(value)]
+                elif key == "hp" or key == "highway_mpg" or key == "city_mpg" or key == "popularity":
+                    if value == "high":
+                        matching_cars.sort_values(by=[key], ascending=False, inplace=True)
+                    elif value == "low":
+                        matching_cars.sort_values(by=[key], ascending=True, inplace=True)
+                    # matching_cars = matching_cars[matching_cars[key] >= int(value)]
                 # elif key == "cylinders":
-                    # matching_cars = matching_cars[matching_cars[key] >= int(value)] if user wants efficiency logic shouldn't provide more cylinders
+                # matching_cars = matching_cars[matching_cars[key] >= int(value)] if user wants efficiency logic shouldn't provide more cylinders
                 else:
-                    matching_cars = matching_cars[matching_cars[key].apply(lambda x: str(value).lower() in str(x).lower())]
+                    matching_cars = matching_cars[
+                        matching_cars[key].apply(lambda x: str(x).lower() in str(value).lower())]
+                    # matching_cars = [
+                            # matching_cars[key].apply(lambda x: str(x).lower() in value.split(","))]
+
                 print("No matching cars found." if matching_cars.empty else ("Matching cars:", matching_cars))
 
         # for key, value in term.items():
-                # if value.lower() != "any":
-                    # matching_cars = matching_cars[matching_cars[key].apply(lambda x: str(value).lower() in str(x).lower())]
+        # if value.lower() != "any":
+        # matching_cars = matching_cars[matching_cars[key].apply(lambda x: str(value).lower() in str(x).lower())]
 
         # print(matching_cars["make"].apply(lambda x: userInput.lower() in str(x).lower()))
-
 
 
 dao = DAO("data/data.csv")
@@ -93,23 +104,22 @@ dao.readData()
 # dao.search("Bugatti")
 
 
-
-print("Search term: ")
+# print("Search term: ")
 # userInput = input()
-userInput = input().split(',')
-print(userInput)
+# userInput = input().split(',')
+# print(userInput)
 
 # TODO: accept ranges in all numeric input for search parameters
 # TODO: make categories array of strings instead of one string
 
-dao.searchCarsByParameters({"make": "porsche", "model": "any", "year": "1990", "price": "any", "city_mpg": "any"})
+# dao.searchCarsByParameters({"make": "porsche", "model": "any", "year": "1990", "price": "any", "city_mpg": "any", "size": "midsize,large"})
 
 # dao.searchParameters(*[term.strip() for term in userInput])
 # dao.search(userInput)
-while userInput != "exit":
+#while userInput != ["exit"]:
     # dao.search(userInput)
-    print("Search term: ")
+    #print("Search term: ")
     # userInput = input()
     # dao.search(userInput)
-    userInput = input().split(',')
+    #userInput = input().split(',')
     # dao.searchParameters(*[term.strip() for term in userInput])

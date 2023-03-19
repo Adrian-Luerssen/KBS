@@ -1,4 +1,4 @@
-Make,Model,Year,Fuel Type,HP,Cylinders,Transmission,Driven_Wheels,Doors,Market Category,Size,Style,highway MPG,city MPG,Popularity,Price
+make,model,year,fuel_type,hp,cylinders,transmission,driven_wheels,doors,category,size,style,highway_mpg,city_mpg,popularity,price
 Acura,ILX,2017,premium unleaded (recommended),201,4,AUTOMATED_MANUAL,front wheel drive,4,Luxury,Compact,Sedan,35,25,204,32990
 Acura,ILX,2017,premium unleaded (recommended),201,4,AUTOMATED_MANUAL,front wheel drive,4,Luxury,Compact,Sedan,35,25,204,29290
 Acura,ILX,2017,premium unleaded (recommended),201,4,AUTOMATED_MANUAL,front wheel drive,4,Luxury,Compact,Sedan,35,25,204,31980
