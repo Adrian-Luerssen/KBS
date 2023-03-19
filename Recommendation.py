@@ -66,13 +66,13 @@ class questions:
 
         for key in self.answerBank:
             for i in range(len(self.answerBank[key])):
-                self.answerBank[key][i] = prep.preProcessing(self.answerBank[key][i])
+                self.answerBank[key][i] = prep.preProcessing(self.answerBank[key][i])[0]
 
         print(self.answerBank)
 
     def obtainPriceRange(self, question, response):
         lst = []
-        print(response)
+        # print(response)
         # join thousand or k to the number
         pos = 0
         while pos < len(response) - 1:
@@ -86,7 +86,7 @@ class questions:
                     response = response[:pos + 1] + response[pos + 2:]
             pos += 1
 
-        print(response)
+        # print(response)
         for tok in response:
             if re.search("[0-9]k", tok) or re.search("[0-9]thousand", tok):
                 lst.append(float(tok.replace("k", "").replace("thousand", "")) * 1000)
@@ -124,79 +124,80 @@ class questions:
 
     def saveAnswer(self, question, response):
         if question == "price":
-            self.profile.limit["price"] = [self.profile.max_price]
-            self.profile.limit["min_price"] = [self.profile.min_price]
+            self.profile.limit["price"] = self.profile.max_price
+            self.profile.limit["min_price"] = self.profile.min_price
         elif question == "priority":
             if "spac" in response:
-                self.profile.limit["doors"] = ["4"]
-                self.profile.limit["size"] = ["large,midsize"]
+                self.profile.limit["doors"] = "4"
+                self.profile.limit["size"] = "large,midsize"
             if "efficy" in response:
                 self.mpg = "high"
             if "fun" in response:
-                self.profile.limit["hp"] = ["high"]
+                self.profile.limit["hp"] = "high"
             if "spee" in response:
-                self.profile.limit["hp"] = ["high"]
-                self.profile.limit["category"] = ["exotic,factory tuner,performance"]
+                self.profile.limit["hp"] = "high"
+                self.profile.limit["category"] = "exotic,factory tuner,performance"
             if "saf" in response:
-                self.profile.limit["year"] = ["2012"]
+                self.profile.limit["year"] = "2012"
             if "rely" in response:
-                self.profile.limit["year"] = ["2014"]
-                self.profile.limit["transmission"] = ["automatic"]
+                self.profile.limit["year"] = "2014"
+                self.profile.limit["transmission"] = "automatic"
         elif question == "environment":
             if "fast" in response:
-                self.profile.limit["hp"] = ["high"]
-                self.profile.limit["category"] = ["exotic,factory tuner,performance"]
+                self.profile.limit["hp"] = "high"
+                self.profile.limit["category"] = "exotic,factory tuner,performance"
             if "eco" or "friend" or "efficy" in response:
-                self.profile.limit["mpg"] = ["high"]
+                self.profile.limit["mpg"] = "high"
             if "balanc" in response:
-                self.profile.limit["hp"] = ["high"]
+                self.profile.limit["hp"] = "high"
         elif question == "terrain":
             if "city" in response:
-                self.profile.limit["city_mpg"] = ["high"]
+                self.profile.limit["city_mpg"] = "high"
             if "highway" in response:
-                self.profile.limit["highway_mpg"] = ["high"]
+                self.profile.limit["highway_mpg"] = "high"
             if "off-road" in response:
-                self.profile.limit["driven_wheels"] = ["all wheel drive,four wheel drive"]
+                self.profile.limit["driven_wheels"] = "all wheel drive,four wheel drive"
         elif question == "circuit":
             if "ye" in response:
-                self.profile.limit["cylinders"] = ["high"]
-                self.profile.limit["transmission"] = ["manual"]
+                self.profile.limit["cylinders"] = "high"
+                self.profile.limit["transmission"] = "manual"
         elif question == "area":
             if "urb" in response:
-                self.profile.limit["category"] = ["hybrid,luxury,hatchback"]
+                self.profile.limit["category"] = "hybrid,luxury,hatchback"
                 if self.mpg == "high":
-                    self.profile.limit["city_mpg"] = ["high"]
+                    self.profile.limit["city_mpg"] = "high"
             if "suburb" in response:
-                self.profile.limit["category"] = ["crossover,hatchback,luxury"]
+                self.profile.limit["category"] = "crossover,hatchback,luxury"
                 if self.mpg == "high":
-                    self.profile.limit["highway_mpg"] = ["high"]
+                    self.profile.limit["highway_mpg"] = "high"
             if "rur" in response:
-                self.profile.limit["category"] = ["crossover"]
+                self.profile.limit["category"] = "crossover"
                 if self.mpg == "high":
-                    self.profile.limit["highway_mpg"] = ["high"]
+                    self.profile.limit["highway_mpg"] = "high"
         elif question == "use":
             if "grocery" in response:
-                self.profile.limit["category"] = ["hybrid,hatchback"]
-                self.profile.limit["size"] = ["midsize"]
+                self.profile.limit["category"] = "hybrid,hatchback"
+                self.profile.limit["size"] = "midsize"
             if "commut" in response:
-                self.profile.limit["category"] = ["hybrid,luxury,hatchback"]
+                self.profile.limit["category"] = "hybrid,luxury,hatchback"
             if "famy" in response:
-                self.profile.limit["category"] = ["crossover,hatchback,luxury"]
-                self.profile.limit["size"] = ["midsize,large"]
+                self.profile.limit["category"] = "crossover,hatchback,luxury"
+                self.profile.limit["size"] = "midsize,large"
             if "sports" in response:
-                self.profile.limit["category"] = ["crossover"]
+                self.profile.limit["category"] = "crossover"
             if "work" in response:
-                self.profile.limit["category"] = ["hybrid,hatchback"]
-                self.profile.limit["size"] = ["midsize,large"]
+                self.profile.limit["category"] = "hybrid,hatchback"
+                self.profile.limit["size"] = "midsize,large"
             if "travel" in response:
-                self.profile.limit["category"] = ["luxury"]
-                self.profile.limit["mpg"] = ["high"]
+                self.profile.limit["category"] = "luxury"
+                self.profile.limit["mpg"] = "high"
 
     def responseIsValid(self, question, response):
         if question == "price":
             return self.obtainPriceRange(question, response)
         else:
             for token in response:
+                print(token, self.answerBank[question])
                 if token in self.answerBank[question]:
                     return True
         return False

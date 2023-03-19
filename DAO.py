@@ -61,7 +61,7 @@ class DAO:
     def searchCarsByParameters(self, search_terms):
         print("searching for cars...")
         matching_cars = self.cars_test
-
+        print(search_terms)
         for key, value in search_terms.items():
             print("filtering by", key, ":", value)
             if value.lower() != "any":
@@ -85,6 +85,7 @@ class DAO:
                 # elif key == "cylinders":
                 # matching_cars = matching_cars[matching_cars[key] >= int(value)] if user wants efficiency logic shouldn't provide more cylinders
                 else:
+                    print(key, value)
                     matching_cars = matching_cars[
                         matching_cars[key].apply(lambda x: str(x).lower() in str(value).lower())]
                     # matching_cars = [
