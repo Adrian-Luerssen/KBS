@@ -5,7 +5,7 @@ class DAO:
     def __init__(self, datapath):
         self.cars_test = None
         self.path = datapath
-
+        self.readData()
     def readData(self):
         import pandas as pd
         # make  model	year	fuel_type	hp	cylinders	transmission	driven_wheels	doors	category	size	style	highway_mpg	city_mpg	popularity	price
@@ -67,10 +67,10 @@ class DAO:
             if str(value).lower() != "any":
                 if key == "year":
                     matching_cars = matching_cars[matching_cars[key] >= int(value)]
-                    matching_cars.sort_values(by=[key], ascending=False, inplace=True)
+                    matching_cars.sort_values(by=key, ascending=False, inplace=True)
                 elif key == "price":
                     matching_cars = matching_cars[matching_cars[key] <= int(value)]
-                    matching_cars.sort_values(by=[key], ascending=True, inplace=True)
+                    matching_cars.sort_values(by=key, ascending=True, inplace=True)
                 elif key == "min_price":
                     matching_cars = matching_cars[matching_cars["price"] >= int(value)]
                     matching_cars.sort_values(by=["price"], ascending=True, inplace=True)
@@ -78,9 +78,11 @@ class DAO:
                     matching_cars = matching_cars[matching_cars[key] >= int(value)]
                 elif key == "hp" or key == "highway_mpg" or key == "city_mpg" or key == "popularity":
                     if value == "high":
-                        matching_cars.sort_values(by=[key], ascending=False, inplace=True)
+                        matching_cars.sort_values(by=key, ascending=False, inplace=True)
                     elif value == "low":
-                        matching_cars.sort_values(by=[key], ascending=True, inplace=True)
+                        matching_cars.sort_values(by=key, ascending=True, inplace=True)
+                elif key == 'mpg':
+                    matching_cars.sort_values(by=["highway_mpg","city_mpg"], ascending=False, inplace=True)
                     # matching_cars = matching_cars[matching_cars[key] >= int(value)]
                 # elif key == "cylinders":
                 # matching_cars = matching_cars[matching_cars[key] >= int(value)] if user wants efficiency logic shouldn't provide more cylinders
@@ -103,8 +105,8 @@ class DAO:
         # print(matching_cars["make"].apply(lambda x: userInput.lower() in str(x).lower()))
 
 
-dao = DAO("data/data.csv")
-dao.readData()
+#dao = DAO("data/data.csv")
+#dao.readData()
 # dao.search("Bugatti")
 
 

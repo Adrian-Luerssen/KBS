@@ -1,5 +1,5 @@
 import PreProcessing as prep
-import Processing as pro
+
 import re
 import DAO
 
@@ -23,7 +23,7 @@ class questions:
         self.profile = profile()
 
         self.dao = DAO.DAO("data/data.csv")
-        self.dao.readData()
+
         for parameter in self.dao.columns:
             self.profile.limit[parameter] = "any"
 
