@@ -77,7 +77,7 @@ class questions:
         # join thousand or k to the number
         pos = 0
         while pos < len(response) - 1:
-            print(response)
+            #print(response)
             if re.search("^[0-9]*$", response[pos]):
                 if "thousand" == response[pos + 1]:
                     response[pos] = response[pos] + "k"
@@ -92,8 +92,8 @@ class questions:
             if re.search("[0-9]k", tok) or re.search("[0-9]thousand", tok):
                 lst.append(float(tok.replace("k", "").replace("thousand", "")) * 1000)
             elif re.search("[0-9]", tok):
-                lst.append(tok)
-
+                lst.append(float(tok))
+        print(lst)
         if (len(lst)) == 0:
             self.answered[question] = False
             return False
@@ -137,7 +137,7 @@ class questions:
                 self.profile.limit["hp"] = "high"
             if "spee" in response:
                 self.profile.limit["hp"] = "high"
-                self.profile.limit["category"] = "exotic,factory tuner,performance"
+                self.profile.limit["category"] = "exotic,factory tuner,performance,high-performance"
             if "saf" in response:
                 self.profile.limit["year"] = "2012"
             if "rely" in response:
@@ -161,7 +161,7 @@ class questions:
         elif question == "circuit":
             if "ye" in response:
                 self.profile.limit["cylinders"] = "high"
-                self.profile.limit["transmission"] = "manual"
+                #self.profile.limit["transmission"] = "manual"
         elif question == "area":
             if "urb" in response:
                 self.profile.limit["category"] = "hybrid,luxury,hatchback"
@@ -253,7 +253,14 @@ class questions:
         print("OUT: Here is the car that fits you the best: ")
         # TODO: output car that fits the most
         print(self.profile.limit)
-        self.dao.searchCarsByParameters(self.profile.limit)
+        results = self.dao.searchCarsByParameters(self.profile.limit)
+        if (len (results) == 0):
+            print("OUT: Sorry we couldn't find a car that fits you, please try again")
+            return 0
+        r = (len(results) if len(results) < 5 else 5)
+        for i in range(0, len(results)):
+            #print(results[i])
+            print(f"{i+1}). {results[i][13]} {results[i][0]} {results[i][1]} with {results[i][4]} transmission, its a {results[i][8]} {' '.join(results[i][7].split(';'))} {results[i][9]} for ${results[i][15]}")
 
     def decisionTree(self, response, question):
         if question == "":
