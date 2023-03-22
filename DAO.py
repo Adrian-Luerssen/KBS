@@ -1,5 +1,5 @@
 class DAO:
-    columns = ["make", "model", "fuel_type", "hp", "transmission", "driven_wheels", "doors", "category",
+    columns = ["make", "model", "fuel_type", "hp", "cylinders", "transmission", "driven_wheels", "doors", "category",
                "size", "style", "highway_mpg", "city_mpg", "popularity", "year", "price"]
 
     def __init__(self, datapath):
@@ -97,7 +97,7 @@ class DAO:
             #print("No matching cars found." if matching_cars.empty else ("Matching cars:", matching_cars.head(10)))
 
         # return cars as a list
-        return matching_cars.values.tolist()
+        return matching_cars.head(10).values.tolist()
         # for key, value in term.items():
         # if value.lower() != "any":
         # matching_cars = matching_cars[matching_cars[key].apply(lambda x: str(value).lower() in str(x).lower())]
@@ -109,14 +109,10 @@ class DAO:
 #dao.readData()
 # dao.search("Bugatti")
 
-
 # print("Search term: ")
 # userInput = input()
 # userInput = input().split(',')
 # print(userInput)
-
-# TODO: accept ranges in all numeric input for search parameters
-# TODO: make categories array of strings instead of one string
 
 # dao.searchCarsByParameters({"make": "porsche", "model": "any", "year": "1990", "price": "any", "city_mpg": "any", "size": "midsize,large"})
 

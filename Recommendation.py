@@ -76,7 +76,7 @@ class questions:
         # join thousand or k to the number
         pos = 0
         while pos < len(response) - 1:
-            #print(response)
+            # print(response)
             if re.search("^[0-9]*$", response[pos]):
                 if "thousand" == response[pos + 1]:
                     response[pos] = response[pos] + "k"
@@ -253,13 +253,14 @@ class questions:
         print("OUT: Here is the car that fits you the best: ")
         print(self.profile.limit)
         results = self.dao.searchCarsByParameters(self.profile.limit)
-        if len (results) == 0:
+        if len(results) == 0:
             print("OUT: Sorry we couldn't find a car that fits you, please try again")
             return 0
         r = (len(results) if len(results) < 5 else 5)
         for i in range(0, len(results)):
-            #print(results[i])
-            print(f"{i+1}). {results[i][13]} {results[i][0]} {results[i][1]} with {results[i][4]} transmission, its a {results[i][8]} {' '.join(results[i][7].split(';'))} {results[i][9]} for ${results[i][15]}")
+            # print(results[i])
+            print(f"{i + 1}). {results[i][self.dao.columns.index('year')]} {results[i][self.dao.columns.index('make')]} {results[i][self.dao.columns.index('model')]} with {results[i][self.dao.columns.index('transmission')]} transmission, its"
+                  f" a {results[i][self.dao.columns.index('size')]} {' '.join(results[i][self.dao.columns.index('category')].split(';'))} {results[i][self.dao.columns.index('style')]} for ${results[i][self.dao.columns.index('price')]}")
 
     def decisionTree(self, response, question):
         if question == "":
