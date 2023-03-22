@@ -1,5 +1,5 @@
 import PreProcessing as prep
-import Processing as pro
+
 import re
 import DAO
 
@@ -23,6 +23,7 @@ class questions:
         self.profile = profile()
 
         self.dao = DAO.DAO("data/data.csv")
+
         for parameter in self.dao.columns:
             self.profile.limit[parameter] = "any"
 
@@ -224,7 +225,7 @@ class questions:
         print()
 
     def askQuestions(self):
-        print("Welcome to the car recommendation system!")
+        print("\n\n\t ****** DEBUG MODE ****** \n\nWelcome to the car recommendation system!")
         print("Please answer the following questions to help us find the best car for you!")
         question = ""
         response = ""
@@ -256,10 +257,13 @@ class questions:
         if len(results) == 0:
             print("OUT: Sorry we couldn't find a car that fits you, please try again")
             return 0
+        else:
+            print("OUT: Based on your answers, we recommend the following cars:")
+
         r = (len(results) if len(results) < 5 else 5)
         for i in range(0, len(results)):
             # print(results[i])
-            print(f"{i + 1}). {results[i][self.dao.columns.index('year')]} {results[i][self.dao.columns.index('make')]} {results[i][self.dao.columns.index('model')]} with {results[i][self.dao.columns.index('transmission')]} transmission, its"
+            print(f"{i + 1}). The {results[i][self.dao.columns.index('year')]} {results[i][self.dao.columns.index('make')]} {results[i][self.dao.columns.index('model')]} with {results[i][self.dao.columns.index('transmission')]} transmission, its"
                   f" a {results[i][self.dao.columns.index('size')]} {' '.join(results[i][self.dao.columns.index('category')].split(';'))} {results[i][self.dao.columns.index('style')]} for ${results[i][self.dao.columns.index('price')]}")
 
     def decisionTree(self, response, question):
