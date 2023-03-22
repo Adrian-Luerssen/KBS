@@ -1,5 +1,5 @@
 import PreProcessing as prep
-
+import Processing as pro
 import re
 import DAO
 
@@ -23,7 +23,6 @@ class questions:
         self.profile = profile()
 
         self.dao = DAO.DAO("data/data.csv")
-
         for parameter in self.dao.columns:
             self.profile.limit[parameter] = "any"
 
@@ -126,7 +125,7 @@ class questions:
     def saveAnswer(self, question, response):
         if question == "price":
             self.profile.limit["price"] = self.profile.max_price
-            self.profile.limit["min_price"] = self.profile.min_price
+            self.profile.limit["price_min"] = self.profile.min_price
         elif question == "priority":
             if "spac" in response:
                 self.profile.limit["doors"] = "4"
@@ -147,8 +146,9 @@ class questions:
             if "fast" in response:
                 self.profile.limit["hp"] = "high"
                 self.profile.limit["category"] = "exotic,factory tuner,performance"
-            if ("eco" in response) or ("friend" in response) or ("efficy" in response):
+            if "eco" in response or "friend" in response or "efficy" in response:
                 self.profile.limit["mpg"] = "high"
+                self.profile.limit["fuel_type"] = "electric"
             if "balanc" in response:
                 self.profile.limit["hp"] = "high"
         elif question == "terrain":
@@ -251,10 +251,9 @@ class questions:
 
         # output car that fits the most
         print("OUT: Here is the car that fits you the best: ")
-        # TODO: output car that fits the most
         print(self.profile.limit)
         results = self.dao.searchCarsByParameters(self.profile.limit)
-        if (len (results) == 0):
+        if len (results) == 0:
             print("OUT: Sorry we couldn't find a car that fits you, please try again")
             return 0
         r = (len(results) if len(results) < 5 else 5)
@@ -289,7 +288,7 @@ class questions:
             return "environment"
 
         elif question == "environment":
-            if ("efficy" in response) or ("friend" in response) or ("eco" in response) or ("bal" in response):
+            if "efficy" in response or "friend" in response or "eco" in response or "bal" in response:
                 return "terrain"
             elif "fast" in response:
                 return "circuit"
