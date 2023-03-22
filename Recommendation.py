@@ -224,7 +224,7 @@ class questions:
         print()
 
     def askQuestions(self):
-        print("Welcome to the car recommendation system!")
+        print("\n\n\t ****** DEBUG MODE ****** \n\nWelcome to the car recommendation system!")
         print("Please answer the following questions to help us find the best car for you!")
         question = ""
         response = ""
@@ -250,17 +250,19 @@ class questions:
                 self.saveAnswer(question, response)
 
         # output car that fits the most
-        print("OUT: Here is the car that fits you the best: ")
         # TODO: output car that fits the most
         print(self.profile.limit)
         results = self.dao.searchCarsByParameters(self.profile.limit)
         if (len (results) == 0):
             print("OUT: Sorry we couldn't find a car that fits you, please try again")
             return 0
+        else:
+            print("OUT: Based on your answers, we recommend the following cars:")
+
         r = (len(results) if len(results) < 5 else 5)
-        for i in range(0, len(results)):
+        for i in range(0, r):
             #print(results[i])
-            print(f"{i+1}). {results[i][13]} {results[i][0]} {results[i][1]} with {results[i][4]} transmission, its a {results[i][8]} {' '.join(results[i][7].split(';'))} {results[i][9]} for ${results[i][15]}")
+            print(f"{i+1}). The {results[i][13]} {results[i][0]} {results[i][1]} with {results[i][4]} transmission, it's a {results[i][8]} {' '.join(results[i][7].split(';'))} {results[i][9]} for ${results[i][15]}")
 
     def decisionTree(self, response, question):
         if question == "":
