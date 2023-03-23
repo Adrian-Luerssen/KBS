@@ -1,12 +1,12 @@
-@prefix : <http://www.salle.url.edu/KBS/CarChatbot#> .
+@prefix : <https://dbpedia.org/ontology/#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@base <http://www.salle.url.edu/KBS/CarChatbot> .
+@base <https://dbpedia.org/ontology/> .
 
-<http://www.salle.url.edu/KBS/CarChatbot> rdf:type owl:Ontology .
+<https://dbpedia.org/ontology/> rdf:type owl:Ontology .
 
 
 #################################################################
@@ -16,69 +16,45 @@
 #################################################################
 
 
-###  http://www.salle.url.edu/KBS/CarChatbot#hasBrand
+###  https://dbpedia.org/ontology/hasBrand
 
-:hasBrand rdf:type owl:ObjectProperty ;
-          
-          rdfs:range :Brand ;
-          
-          rdfs:domain <https://dbpedia.org/page/Car> .
+<https://dbpedia.org/ontology/hasBrand> rdf:type owl:ObjectProperty ;
+                                        
+                                        rdfs:domain :Brand .
 
 
 
-###  http://www.salle.url.edu/KBS/CarChatbot#hasCountryOfOrigin
+###  https://dbpedia.org/ontology/hasEngine
 
-:hasCountryOfOrigin rdf:type owl:ObjectProperty ;
-                    
-                    rdfs:domain :Brand ;
-                    
-                    rdfs:range <https://dbpedia.org/page/Country> .
+<https://dbpedia.org/ontology/hasEngine> rdf:type owl:ObjectProperty ;
+                                         
+                                         rdfs:range <https://dbpedia.org/page/Engine> .
 
 
 
-###  http://www.salle.url.edu/KBS/CarChatbot#hasEngine
+###  https://dbpedia.org/ontology/hasModel
 
-:hasEngine rdf:type owl:ObjectProperty ;
-           
-           rdfs:domain <https://dbpedia.org/page/Car> ;
-           
-           rdfs:range <https://dbpedia.org/page/Engine> .
-
-
-
-###  http://www.salle.url.edu/KBS/CarChatbot#isBrandof
-
-:isBrandof rdf:type owl:ObjectProperty ;
-           
-           rdfs:domain :Brand ;
-           
-           owl:inverseOf :hasBrand ;
-           
-           rdfs:range <https://dbpedia.org/page/Car> .
+<https://dbpedia.org/ontology/hasModel> rdf:type owl:ObjectProperty ;
+                                        
+                                        owl:inverseOf <https://dbpedia.org/ontology/hasBrand> ;
+                                        
+                                        rdfs:range :Brand .
 
 
 
-###  http://www.salle.url.edu/KBS/CarChatbot#isCountryOf
+###  https://dbpedia.org/ontology/isEngineOf
 
-:isCountryOf rdf:type owl:ObjectProperty ;
-             
-             rdfs:range :Brand ;
-             
-             owl:inverseOf :hasCountryOfOrigin ;
-             
-             rdfs:domain <https://dbpedia.org/page/Country> .
+<https://dbpedia.org/ontology/isEngineOf> rdf:type owl:ObjectProperty ;
+                                          
+                                          owl:inverseOf <https://dbpedia.org/ontology/hasEngine> ;
+                                          
+                                          rdfs:domain <https://dbpedia.org/page/Engine> .
 
 
 
-###  http://www.salle.url.edu/KBS/CarChatbot#isEngineOf
+###  https://dbpedia.org/ontology/isFrom
 
-:isEngineOf rdf:type owl:ObjectProperty ;
-            
-            owl:inverseOf :hasEngine ;
-            
-            rdfs:range <https://dbpedia.org/page/Car> ;
-            
-            rdfs:domain <https://dbpedia.org/page/Engine> .
+<https://dbpedia.org/ontology/isFrom> rdf:type owl:ObjectProperty .
 
 
 
@@ -91,23 +67,22 @@
 #################################################################
 
 
-###  http://www.salle.url.edu/KBS/CarChatbot#Brand
+###  https://dbpedia.org/ontology/#Brand
 
-:Brand rdf:type owl:Class .
-
-
-
-###  http://www.salle.url.edu/KBS/CarChatbot#Model
-
-:Model rdf:type owl:Class ;
+:Brand rdf:type owl:Class ;
        
-       rdfs:subClassOf <https://dbpedia.org/page/Car> .
+       rdfs:subClassOf :DomainThing ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty <https://dbpedia.org/ontology/isFrom> ;
+                         owl:onClass <https://dbpedia.org/page/Country> ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                       ] .
 
 
 
-###  https://dbpedia.org/page/Car
+###  https://dbpedia.org/ontology/#DomainThing
 
-<https://dbpedia.org/page/Car> rdf:type owl:Class .
+:DomainThing rdf:type owl:Class .
 
 
 
@@ -115,13 +90,27 @@
 
 <https://dbpedia.org/page/Country> rdf:type owl:Class ;
                                    
-                                   rdfs:subClassOf <https://dbpedia.org/page/Car> .
+                                   owl:equivalentClass [ rdf:type owl:Class ;
+                                                         owl:intersectionOf ( :DomainThing
+                                                                              [ rdf:type owl:Class ;
+                                                                                owl:oneOf ( <https://dbpedia.org/page/Italy>
+                                                                                            <https://dbpedia.org/page/Japan>
+                                                                                            <https://dbpedia.org/page/United_States>
+                                                                                            <https://dbpedia.org/page/France>
+                                                                                            <https://dbpedia.org/page/Germany>
+                                                                                            <https://dbpedia.org/page/United_Kingdom>
+                                                                                          )
+                                                                              ]
+                                                                            )
+                                                       ] .
 
 
 
 ###  https://dbpedia.org/page/Engine
 
-<https://dbpedia.org/page/Engine> rdf:type owl:Class .
+<https://dbpedia.org/page/Engine> rdf:type owl:Class ;
+                                  
+                                  rdfs:subClassOf :DomainThing .
 
 
 
@@ -129,13 +118,28 @@
 
 <https://dbpedia.org/page/Pistonless_rotary_engine> rdf:type owl:Class ;
                                                     
-                                                    rdfs:subClassOf <https://dbpedia.org/page/Engine> .
+                                                    rdfs:subClassOf <https://dbpedia.org/page/Engine> ;
+                                                    
+                                                    owl:disjointWith <https://dbpedia.org/page/Reciprocating_engine> .
 
 
 
 ###  https://dbpedia.org/page/Reciprocating_engine
 
 <https://dbpedia.org/page/Reciprocating_engine> rdf:type owl:Class ;
+                                                
+                                                owl:equivalentClass [ rdf:type owl:Class ;
+                                                                      owl:intersectionOf ( <https://dbpedia.org/page/Engine>
+                                                                                           [ rdf:type owl:Class ;
+                                                                                             owl:oneOf ( <https://dbpedia.org/page/V10_engine>
+                                                                                                         <https://dbpedia.org/page/V12_engine>
+                                                                                                         <https://dbpedia.org/page/V8_engine>
+                                                                                                         <https://dbpedia.org/page/V6_engine>
+                                                                                                         <https://dbpedia.org/page/V4_engine>
+                                                                                                       )
+                                                                                           ]
+                                                                                         )
+                                                                    ] ;
                                                 
                                                 rdfs:subClassOf <https://dbpedia.org/page/Engine> .
 
@@ -150,66 +154,67 @@
 #################################################################
 
 
-###  http://www.salle.url.edu/KBS/CarChatbot#Purosangue
+###  https://dbpedia.org/ontology/2_Rotor
 
-:Purosangue rdf:type :Model ,
-                     owl:NamedIndividual ,
-                     [ rdf:type owl:Restriction ;
-                       owl:onProperty :hasEngine ;
-                       owl:hasValue <https://dbpedia.org/page/V12_engine>
-                     ] ,
-                     [ rdf:type owl:Restriction ;
-                       owl:onProperty :hasEngine ;
-                       owl:allValuesFrom <https://dbpedia.org/page/Reciprocating_engine>
-                     ] ,
-                     [ rdf:type owl:Restriction ;
-                       owl:onProperty :hasCountryOfOrigin ;
-                       owl:hasValue <https://dbpedia.org/page/Italy>
-                     ] ,
-                     [ rdf:type owl:Restriction ;
-                       owl:onProperty :hasBrand ;
-                       owl:hasValue <https://dbpedia.org/page/Ferrari>
-                     ] .
+<https://dbpedia.org/ontology/2_Rotor> rdf:type owl:NamedIndividual ,
+                                                <https://dbpedia.org/page/Pistonless_rotary_engine> .
 
 
 
-###  http://www.salle.url.edu/KBS/CarChatbot#RX-7
+###  https://dbpedia.org/ontology/3_Rotor
 
-:RX-7 rdf:type :Model ,
-               owl:NamedIndividual ,
-               [ rdf:type owl:Restriction ;
-                 owl:onProperty :hasEngine ;
-                 owl:allValuesFrom <https://dbpedia.org/page/Reciprocating_engine>
-               ] ,
-               [ rdf:type owl:Restriction ;
-                 owl:onProperty :hasCountryOfOrigin ;
-                 owl:hasValue <https://dbpedia.org/page/Japan>
-               ] ,
-               [ rdf:type owl:Restriction ;
-                 owl:onProperty :hasBrand ;
-                 owl:hasValue <https://dbpedia.org/page/Mazda>
-               ] .
+<https://dbpedia.org/ontology/3_Rotor> rdf:type owl:NamedIndividual ,
+                                                <https://dbpedia.org/page/Pistonless_rotary_engine> .
 
 
 
-###  https://dbpedia.org/page/Audi
+###  https://dbpedia.org/ontology/4_Rotor
 
-<https://dbpedia.org/page/Audi> rdf:type :Brand ,
-                                         owl:NamedIndividual .
-
-
-
-###  https://dbpedia.org/page/BMW
-
-<https://dbpedia.org/page/BMW> rdf:type :Brand ,
-                                        owl:NamedIndividual .
+<https://dbpedia.org/ontology/4_Rotor> rdf:type owl:NamedIndividual ,
+                                                <https://dbpedia.org/page/Pistonless_rotary_engine> .
 
 
 
-###  https://dbpedia.org/page/Ferrari
+###  https://dbpedia.org/ontology/Audi
 
-<https://dbpedia.org/page/Ferrari> rdf:type :Brand ,
-                                            owl:NamedIndividual .
+<https://dbpedia.org/ontology/Audi> rdf:type owl:NamedIndividual ,
+                                             :Brand ;
+                                    
+                                    <https://dbpedia.org/ontology/isFrom> <https://dbpedia.org/page/Germany> .
+
+
+
+###  https://dbpedia.org/ontology/BMW
+
+<https://dbpedia.org/ontology/BMW> rdf:type owl:NamedIndividual ,
+                                            :Brand ;
+                                   
+                                   <https://dbpedia.org/ontology/isFrom> <https://dbpedia.org/page/Germany> .
+
+
+
+###  https://dbpedia.org/ontology/MX-5
+
+<https://dbpedia.org/ontology/MX-5> rdf:type owl:NamedIndividual .
+
+
+
+###  https://dbpedia.org/ontology/Mazda
+
+<https://dbpedia.org/ontology/Mazda> rdf:type owl:NamedIndividual ,
+                                              :Brand ;
+                                     
+                                     <https://dbpedia.org/ontology/isFrom> <https://dbpedia.org/page/Japan> .
+
+
+
+###  https://dbpedia.org/ontology/RX-7
+
+<https://dbpedia.org/ontology/RX-7> rdf:type owl:NamedIndividual ;
+                                    
+                                    <https://dbpedia.org/ontology/hasEngine> <https://dbpedia.org/ontology/2_Rotor> ;
+                                    
+                                    <https://dbpedia.org/ontology/hasBrand> <https://dbpedia.org/ontology/Mazda> .
 
 
 
@@ -238,13 +243,6 @@
 
 <https://dbpedia.org/page/Japan> rdf:type owl:NamedIndividual ,
                                           <https://dbpedia.org/page/Country> .
-
-
-
-###  https://dbpedia.org/page/Mazda
-
-<https://dbpedia.org/page/Mazda> rdf:type :Brand ,
-                                          owl:NamedIndividual .
 
 
 
