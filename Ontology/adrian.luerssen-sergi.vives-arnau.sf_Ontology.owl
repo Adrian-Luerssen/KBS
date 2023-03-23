@@ -26,12 +26,6 @@
 
 
 
-###  https://dbpedia.org/ontology/hasDoors
-
-<https://dbpedia.org/ontology/hasDoors> rdf:type owl:ObjectProperty .
-
-
-
 ###  https://dbpedia.org/ontology/hasEngine
 
 <https://dbpedia.org/ontology/hasEngine> rdf:type owl:ObjectProperty ;
@@ -96,6 +90,27 @@
 
 #################################################################
 #
+#    Data properties
+#
+#################################################################
+
+
+###  https://dbpedia.org/ontology/isLifted
+
+<https://dbpedia.org/ontology/isLifted> rdf:type owl:DatatypeProperty .
+
+
+
+###  https://dbpedia.org/ontology/numberOfDoors
+
+<https://dbpedia.org/ontology/numberOfDoors> rdf:type owl:DatatypeProperty .
+
+
+
+
+
+#################################################################
+#
 #    Classes
 #
 #################################################################
@@ -148,24 +163,17 @@
 
 <https://dbpedia.org/ontology/Engine> rdf:type owl:Class ;
                                       
-                                      rdfs:subClassOf <https://dbpedia.org/ontology/DomainThing> .
-
-
-
-###  https://dbpedia.org/ontology/Family
-
-<https://dbpedia.org/ontology/Family> rdf:type owl:Class ;
-                                      
-                                      owl:equivalentClass [ rdf:type owl:Class ;
-                                                            owl:intersectionOf ( <https://dbpedia.org/ontology/Car>
-                                                                                 [ rdf:type owl:Restriction ;
-                                                                                   owl:onProperty <https://dbpedia.org/ontology/hasDoors> ;
-                                                                                   owl:hasValue <https://dbpedia.org/ontology/4Door>
-                                                                                 ]
-                                                                               )
-                                                          ] ;
-                                      
-                                      rdfs:subClassOf <https://dbpedia.org/ontology/Car> .
+                                      rdfs:subClassOf <https://dbpedia.org/ontology/DomainThing> ,
+                                                      [ rdf:type owl:Restriction ;
+                                                        owl:onProperty <https://dbpedia.org/ontology/isEngineOf> ;
+                                                        owl:someValuesFrom <https://dbpedia.org/ontology/Car>
+                                                      ] ,
+                                                      [ rdf:type owl:Class ;
+                                                        owl:complementOf [ rdf:type owl:Restriction ;
+                                                                           owl:onProperty <https://dbpedia.org/ontology/hasBrand> ;
+                                                                           owl:someValuesFrom <https://dbpedia.org/ontology/Car>
+                                                                         ]
+                                                      ] .
 
 
 
@@ -176,12 +184,12 @@
                                      owl:equivalentClass [ rdf:type owl:Class ;
                                                            owl:intersectionOf ( <https://dbpedia.org/ontology/Car>
                                                                                 [ rdf:type owl:Restriction ;
-                                                                                  owl:onProperty <https://dbpedia.org/ontology/hasDoors> ;
-                                                                                  owl:hasValue <https://dbpedia.org/ontology/2Door>
-                                                                                ]
-                                                                                [ rdf:type owl:Restriction ;
                                                                                   owl:onProperty <https://dbpedia.org/ontology/hasEngine> ;
                                                                                   owl:hasValue <https://dbpedia.org/ontology/V12>
+                                                                                ]
+                                                                                [ rdf:type owl:Restriction ;
+                                                                                  owl:onProperty <https://dbpedia.org/ontology/numberOfDoors> ;
+                                                                                  owl:hasValue 2
                                                                                 ]
                                                                               )
                                                          ] ;
@@ -208,9 +216,58 @@
 
 
 
+###  https://dbpedia.org/ontology/SUV
+
+<https://dbpedia.org/ontology/SUV> rdf:type owl:Class ;
+                                   
+                                   owl:equivalentClass [ rdf:type owl:Class ;
+                                                         owl:intersectionOf ( <https://dbpedia.org/ontology/Car>
+                                                                              [ rdf:type owl:Class ;
+                                                                                owl:unionOf ( [ rdf:type owl:Restriction ;
+                                                                                                owl:onProperty <https://dbpedia.org/ontology/hasEngine> ;
+                                                                                                owl:hasValue <https://dbpedia.org/ontology/V10>
+                                                                                              ]
+                                                                                              [ rdf:type owl:Restriction ;
+                                                                                                owl:onProperty <https://dbpedia.org/ontology/hasEngine> ;
+                                                                                                owl:hasValue <https://dbpedia.org/ontology/V12>
+                                                                                              ]
+                                                                                              [ rdf:type owl:Restriction ;
+                                                                                                owl:onProperty <https://dbpedia.org/ontology/hasEngine> ;
+                                                                                                owl:hasValue <https://dbpedia.org/ontology/V8>
+                                                                                              ]
+                                                                                            )
+                                                                              ]
+                                                                              [ rdf:type owl:Restriction ;
+                                                                                owl:onProperty <https://dbpedia.org/ontology/isLifted> ;
+                                                                                owl:hasValue "true"^^xsd:boolean
+                                                                              ]
+                                                                              [ rdf:type owl:Restriction ;
+                                                                                owl:onProperty <https://dbpedia.org/ontology/numberOfDoors> ;
+                                                                                owl:hasValue 4
+                                                                              ]
+                                                                            )
+                                                       ] ;
+                                   
+                                   rdfs:subClassOf <https://dbpedia.org/ontology/Car> .
+
+
+
 ###  https://dbpedia.org/ontology/Sedan
 
 <https://dbpedia.org/ontology/Sedan> rdf:type owl:Class ;
+                                     
+                                     owl:equivalentClass [ rdf:type owl:Class ;
+                                                           owl:intersectionOf ( <https://dbpedia.org/ontology/Car>
+                                                                                [ rdf:type owl:Restriction ;
+                                                                                  owl:onProperty <https://dbpedia.org/ontology/isLifted> ;
+                                                                                  owl:hasValue "false"^^xsd:boolean
+                                                                                ]
+                                                                                [ rdf:type owl:Restriction ;
+                                                                                  owl:onProperty <https://dbpedia.org/ontology/numberOfDoors> ;
+                                                                                  owl:hasValue 4
+                                                                                ]
+                                                                              )
+                                                         ] ;
                                      
                                      rdfs:subClassOf <https://dbpedia.org/ontology/Car> .
 
@@ -225,12 +282,6 @@
 #################################################################
 
 
-###  https://dbpedia.org/ontology/2Door
-
-<https://dbpedia.org/ontology/2Door> rdf:type owl:NamedIndividual .
-
-
-
 ###  https://dbpedia.org/ontology/2_Rotor
 
 <https://dbpedia.org/ontology/2_Rotor> rdf:type owl:NamedIndividual ,
@@ -242,17 +293,9 @@
 
 <https://dbpedia.org/ontology/458> rdf:type owl:NamedIndividual ;
                                    
-                                   <https://dbpedia.org/ontology/hasDoors> <https://dbpedia.org/ontology/2Door> ;
-                                   
                                    <https://dbpedia.org/ontology/hasBrand> <https://dbpedia.org/ontology/Ferrari> ;
                                    
                                    <https://dbpedia.org/ontology/hasEngine> <https://dbpedia.org/ontology/V8> .
-
-
-
-###  https://dbpedia.org/ontology/4Door
-
-<https://dbpedia.org/ontology/4Door> rdf:type owl:NamedIndividual .
 
 
 
@@ -263,11 +306,25 @@
 
 
 
+###  https://dbpedia.org/ontology/Cayenne
+
+<https://dbpedia.org/ontology/Cayenne> rdf:type owl:NamedIndividual ;
+                                       
+                                       <https://dbpedia.org/ontology/numberOfDoors> 4 ;
+                                       
+                                       <https://dbpedia.org/ontology/isLifted> "true"^^xsd:boolean ;
+                                       
+                                       <https://dbpedia.org/ontology/hasBrand> <https://dbpedia.org/ontology/Porsche> ;
+                                       
+                                       <https://dbpedia.org/ontology/hasEngine> <https://dbpedia.org/ontology/V6> .
+
+
+
 ###  https://dbpedia.org/ontology/Daytona_SP3
 
 <https://dbpedia.org/ontology/Daytona_SP3> rdf:type owl:NamedIndividual ;
                                            
-                                           <https://dbpedia.org/ontology/hasDoors> <https://dbpedia.org/ontology/2Door> ;
+                                           <https://dbpedia.org/ontology/numberOfDoors> 2 ;
                                            
                                            <https://dbpedia.org/ontology/hasBrand> <https://dbpedia.org/ontology/Ferrari> ;
                                            
@@ -280,7 +337,7 @@
 <https://dbpedia.org/ontology/F40> rdf:type owl:NamedIndividual ,
                                             <https://dbpedia.org/ontology/Car> ;
                                    
-                                   <https://dbpedia.org/ontology/hasDoors> <https://dbpedia.org/ontology/2Door> ;
+                                   <https://dbpedia.org/ontology/numberOfDoors> 2 ;
                                    
                                    <https://dbpedia.org/ontology/hasBrand> <https://dbpedia.org/ontology/Ferrari> ;
                                    
@@ -294,6 +351,13 @@
                                                 <https://dbpedia.org/ontology/Brand> ;
                                        
                                        <https://dbpedia.org/ontology/isFrom> <https://dbpedia.org/ontology/Italy> .
+
+
+
+###  https://dbpedia.org/ontology/Germany
+
+<https://dbpedia.org/ontology/Germany> rdf:type owl:NamedIndividual ,
+                                                <https://dbpedia.org/ontology/Country> .
 
 
 
@@ -316,11 +380,25 @@
 <https://dbpedia.org/ontology/LFA> rdf:type owl:NamedIndividual ,
                                             <https://dbpedia.org/ontology/Car> ;
                                    
-                                   <https://dbpedia.org/ontology/hasDoors> <https://dbpedia.org/ontology/2Door> ;
+                                   <https://dbpedia.org/ontology/numberOfDoors> 2 ;
                                    
                                    <https://dbpedia.org/ontology/hasBrand> <https://dbpedia.org/ontology/Lexus> ;
                                    
                                    <https://dbpedia.org/ontology/hasEngine> <https://dbpedia.org/ontology/V10> .
+
+
+
+###  https://dbpedia.org/ontology/LS
+
+<https://dbpedia.org/ontology/LS> rdf:type owl:NamedIndividual ;
+                                  
+                                  <https://dbpedia.org/ontology/numberOfDoors> 4 ;
+                                  
+                                  <https://dbpedia.org/ontology/isLifted> "false"^^xsd:boolean ;
+                                  
+                                  <https://dbpedia.org/ontology/hasBrand> <https://dbpedia.org/ontology/Lexus> ;
+                                  
+                                  <https://dbpedia.org/ontology/hasEngine> <https://dbpedia.org/ontology/V6> .
 
 
 
@@ -351,12 +429,34 @@
 
 
 
+###  https://dbpedia.org/ontology/Porsche
+
+<https://dbpedia.org/ontology/Porsche> rdf:type owl:NamedIndividual ;
+                                       
+                                       <https://dbpedia.org/ontology/isFrom> <https://dbpedia.org/ontology/Germany> .
+
+
+
+###  https://dbpedia.org/ontology/Purosangue
+
+<https://dbpedia.org/ontology/Purosangue> rdf:type owl:NamedIndividual ;
+                                          
+                                          <https://dbpedia.org/ontology/numberOfDoors> 4 ;
+                                          
+                                          <https://dbpedia.org/ontology/isLifted> "true"^^xsd:boolean ;
+                                          
+                                          <https://dbpedia.org/ontology/hasBrand> <https://dbpedia.org/ontology/Ferrari> ;
+                                          
+                                          <https://dbpedia.org/ontology/hasEngine> <https://dbpedia.org/ontology/V12> .
+
+
+
 ###  https://dbpedia.org/ontology/RX-7
 
 <https://dbpedia.org/ontology/RX-7> rdf:type owl:NamedIndividual ,
                                              <https://dbpedia.org/ontology/Car> ;
                                     
-                                    <https://dbpedia.org/ontology/hasDoors> <https://dbpedia.org/ontology/2Door> ;
+                                    <https://dbpedia.org/ontology/numberOfDoors> 2 ;
                                     
                                     <https://dbpedia.org/ontology/hasEngine> <https://dbpedia.org/ontology/2_Rotor> ;
                                     
@@ -377,6 +477,13 @@
 
 
 
+###  https://dbpedia.org/ontology/V6
+
+<https://dbpedia.org/ontology/V6> rdf:type owl:NamedIndividual ,
+                                           <https://dbpedia.org/ontology/Piston_Engine> .
+
+
+
 ###  https://dbpedia.org/ontology/V8
 
 <https://dbpedia.org/ontology/V8> rdf:type owl:NamedIndividual ,
@@ -389,29 +496,11 @@
 <https://dbpedia.org/ontology/Zonda_R> rdf:type owl:NamedIndividual ,
                                                 <https://dbpedia.org/ontology/Hyper> ;
                                        
-                                       <https://dbpedia.org/ontology/hasDoors> <https://dbpedia.org/ontology/2Door> ;
+                                       <https://dbpedia.org/ontology/numberOfDoors> 2 ;
                                        
                                        <https://dbpedia.org/ontology/hasBrand> <https://dbpedia.org/ontology/Pagani> ;
                                        
                                        <https://dbpedia.org/ontology/hasEngine> <https://dbpedia.org/ontology/V12> .
-
-
-
-
-
-#################################################################
-#
-#    General axioms
-#
-#################################################################
-
-
-[ rdf:type owl:AllDisjointClasses ;
-  owl:members ( <https://dbpedia.org/ontology/Family>
-                <https://dbpedia.org/ontology/Hyper>
-                <https://dbpedia.org/ontology/Sedan>
-              )
-] .
 
 
 
