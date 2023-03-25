@@ -280,12 +280,6 @@
                         [ rdf:type owl:Restriction ;
                           owl:onProperty :isEngineOf ;
                           owl:someValuesFrom :Car
-                        ] ,
-                        [ rdf:type owl:Class ;
-                          owl:complementOf [ rdf:type owl:Restriction ;
-                                             owl:onProperty :hasBrand ;
-                                             owl:someValuesFrom :Car
-                                           ]
                         ] .
 
 
