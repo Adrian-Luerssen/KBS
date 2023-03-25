@@ -177,7 +177,11 @@
                                                                                  )
                                                             ] ;
                                         
-                                        rdfs:subClassOf :Car .
+                                        rdfs:subClassOf :Car ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <https://dbpedia.org/ontology/hasTransmission> ;
+                                                          owl:hasValue <https://dbpedia.org/ontology/Automatic>
+                                                        ] .
 
 
 
@@ -185,7 +189,11 @@
 
 <https://dbpedia.org/ontology/Transmission> rdf:type owl:Class ;
                                             
-                                            rdfs:subClassOf <https://dbpedia.org/ontology/AutoPart> .
+                                            rdfs:subClassOf <https://dbpedia.org/ontology/AutoPart> ,
+                                                            [ rdf:type owl:Restriction ;
+                                                              owl:onProperty <https://dbpedia.org/ontology/isTransmissionOf> ;
+                                                              owl:someValuesFrom :Car
+                                                            ] .
 
 
 
@@ -229,20 +237,23 @@
 :Car rdf:type owl:Class ;
      
      rdfs:subClassOf <https://dbpedia.org/ontology/Car_Thing> ,
-                     [ rdf:type owl:Restriction ;
-                       owl:onProperty :hasBrand ;
-                       owl:onClass :Brand ;
-                       owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
-                     ] ,
-                     [ rdf:type owl:Restriction ;
-                       owl:onProperty :hasEngine ;
-                       owl:onClass :Engine ;
-                       owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
-                     ] ,
-                     [ rdf:type owl:Restriction ;
-                       owl:onProperty <https://dbpedia.org/ontology/hasTransmission> ;
-                       owl:onClass <https://dbpedia.org/ontology/Transmission> ;
-                       owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                     [ rdf:type owl:Class ;
+                       owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                              owl:onProperty <https://dbpedia.org/ontology/hasTransmission> ;
+                                              owl:onClass <https://dbpedia.org/ontology/Transmission> ;
+                                              owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                            ]
+                                            [ rdf:type owl:Restriction ;
+                                              owl:onProperty :hasBrand ;
+                                              owl:onClass :Brand ;
+                                              owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                            ]
+                                            [ rdf:type owl:Restriction ;
+                                              owl:onProperty :hasEngine ;
+                                              owl:onClass :Engine ;
+                                              owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                            ]
+                                          )
                      ] .
 
 
@@ -266,15 +277,15 @@
 :Engine rdf:type owl:Class ;
         
         rdfs:subClassOf <https://dbpedia.org/ontology/AutoPart> ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :isEngineOf ;
+                          owl:someValuesFrom :Car
+                        ] ,
                         [ rdf:type owl:Class ;
                           owl:complementOf [ rdf:type owl:Restriction ;
                                              owl:onProperty :hasBrand ;
                                              owl:someValuesFrom :Car
                                            ]
-                        ] ,
-                        [ rdf:type owl:Restriction ;
-                          owl:onProperty :isEngineOf ;
-                          owl:someValuesFrom :Car
                         ] .
 
 
@@ -598,8 +609,6 @@
          :numberOfDoors 4 ;
          
          :isLifted "true"^^xsd:boolean ;
-         
-         <https://dbpedia.org/ontology/hasTransmission> <https://dbpedia.org/ontology/Automatic> ;
          
          :hasEngine :DC_Motor ;
          
