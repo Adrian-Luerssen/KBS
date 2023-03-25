@@ -150,6 +150,20 @@
 #################################################################
 
 
+###  https://dbpedia.org/ontology/AutoPart
+
+<https://dbpedia.org/ontology/AutoPart> rdf:type owl:Class ;
+                                        
+                                        rdfs:subClassOf <https://dbpedia.org/ontology/Car_Thing> .
+
+
+
+###  https://dbpedia.org/ontology/Car_Thing
+
+<https://dbpedia.org/ontology/Car_Thing> rdf:type owl:Class .
+
+
+
 ###  https://dbpedia.org/ontology/Electric
 
 <https://dbpedia.org/ontology/Electric> rdf:type owl:Class ;
@@ -171,7 +185,7 @@
 
 <https://dbpedia.org/ontology/Transmission> rdf:type owl:Class ;
                                             
-                                            rdfs:subClassOf :DomainThing .
+                                            rdfs:subClassOf <https://dbpedia.org/ontology/AutoPart> .
 
 
 
@@ -201,7 +215,7 @@
 
 :Brand rdf:type owl:Class ;
        
-       rdfs:subClassOf :DomainThing ,
+       rdfs:subClassOf <https://dbpedia.org/ontology/Car_Thing> ,
                        [ rdf:type owl:Restriction ;
                          owl:onProperty :isBrandOf ;
                          owl:onClass :Car ;
@@ -214,7 +228,7 @@
 
 :Car rdf:type owl:Class ;
      
-     rdfs:subClassOf :DomainThing ,
+     rdfs:subClassOf <https://dbpedia.org/ontology/Car_Thing> ,
                      [ rdf:type owl:Restriction ;
                        owl:onProperty :hasBrand ;
                        owl:onClass :Brand ;
@@ -224,6 +238,11 @@
                        owl:onProperty :hasEngine ;
                        owl:onClass :Engine ;
                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                     ] ,
+                     [ rdf:type owl:Restriction ;
+                       owl:onProperty <https://dbpedia.org/ontology/hasTransmission> ;
+                       owl:onClass <https://dbpedia.org/ontology/Transmission> ;
+                       owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
                      ] .
 
 
@@ -231,12 +250,6 @@
 ###  https://dbpedia.org/ontology/#Country
 
 :Country rdf:type owl:Class .
-
-
-
-###  https://dbpedia.org/ontology/#DomainThing
-
-:DomainThing rdf:type owl:Class .
 
 
 
@@ -252,7 +265,7 @@
 
 :Engine rdf:type owl:Class ;
         
-        rdfs:subClassOf :DomainThing ,
+        rdfs:subClassOf <https://dbpedia.org/ontology/AutoPart> ,
                         [ rdf:type owl:Class ;
                           owl:complementOf [ rdf:type owl:Restriction ;
                                              owl:onProperty :hasBrand ;
@@ -587,6 +600,8 @@
          :numberOfDoors 4 ;
          
          :isLifted "true"^^xsd:boolean ;
+         
+         <https://dbpedia.org/ontology/hasTransmission> <https://dbpedia.org/ontology/Automatic> ;
          
          :hasEngine :DC_Motor ;
          
