@@ -223,11 +223,10 @@
 
 :Brand rdf:type owl:Class ;
        
-       rdfs:subClassOf <https://dbpedia.org/ontology/Car_Thing> ,
-                       [ rdf:type owl:Restriction ;
-                         owl:onProperty :isBrandOf ;
-                         owl:onClass :Car ;
-                         owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+       rdfs:subClassOf [ rdf:type owl:Restriction ;
+                         owl:onProperty :isFrom ;
+                         owl:onClass :Country ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                        ] .
 
 
