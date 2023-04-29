@@ -40,7 +40,7 @@ class questions:
 
         self.questions["priority"] = "What is your priority when buying a car?"
         self.answerBank["priority"] = ["reliability", "efficiency", "fun",
-                                       "space", "use", "speed", "safety"]
+                                       "space", "use", "fast", "safety"]
         self.answered["priority"] = False
 
         self.questions["environment"] = "Do you prefer a faster car or an eco-friendly one?"
@@ -135,7 +135,7 @@ class questions:
                 self.mpg = "high"
             if "fun" in response:
                 self.profile.limit["hp"] = "high"
-            if "spee" in response:
+            if "fast" in response:
                 self.profile.limit["hp"] = "high"
                 self.profile.limit["category"] = "exotic,factory tuner,performance,high-performance"
             if "saf" in response:
@@ -199,9 +199,15 @@ class questions:
             return self.obtainPriceRange(question, response)
         else:
             for token in response:
-                print(token, self.answerBank[question])
                 if token in self.answerBank[question]:
                     return True
+                print(prep.synonym_antonym_extractor(token))
+                for synonym in prep.synonym_antonym_extractor(token):
+                    #print(synonym, self.answerBank[question])
+                    if synonym in self.answerBank[question]:
+                        return True
+
+
         return False
 
     def nextQuestion(self, response, question):
@@ -249,6 +255,7 @@ class questions:
                     print(response)
 
                 self.saveAnswer(question, response)
+                print("saved")
 
         # output car that fits the most
         print("OUT: Here is the car that fits you the best: ")
@@ -269,45 +276,47 @@ class questions:
     def decisionTree(self, response, question):
         if question == "":
             return "price"
-
-        elif question == "price":
+        if question == "price":
             return "priority"
+        for word in response:
+            synonyms = prep.synonym_antonym_extractor(word)
+            synonyms.append(word)
 
-        elif question == "priority":
-            if "rely" in response:
-                return "terrain"
-            elif "efficy" in response:
-                return "terrain"
-            elif "spee" in response:
+            if question == "priority":
+                if "rely" in synonyms:
+                    return "terrain"
+                elif "efficy" in synonyms:
+                    return "terrain"
+                elif "fast" in synonyms:
+                    return "environment"
+                elif "fun" in synonyms:
+                    return "environment"
+                elif "spac" in synonyms:
+                    return "area"
+                elif "us" in synonyms:
+                    return "use"
+                elif "safety" in synonyms:
+                    return "use"
+
+            elif question == "use":
                 return "environment"
-            elif "fun" in response:
-                return "environment"
-            elif "spac" in response:
+
+            elif question == "environment":
+                if "efficy" in synonyms or "friend" in synonyms or "eco" in synonyms or "bal" in synonyms:
+                    return "terrain"
+                elif "fast" in synonyms:
+                    return "circuit"
+
+            elif question == "terrain":
                 return "area"
-            elif "us" in response:
-                return "use"
-            elif "safety" in response:
-                return "use"
 
-        elif question == "use":
-            return "environment"
+            elif question == "circuit":
+                self.end_reached = True
+                return None
 
-        elif question == "environment":
-            if "efficy" in response or "friend" in response or "eco" in response or "bal" in response:
-                return "terrain"
-            elif "fast" in response:
-                return "circuit"
+            elif question == "area":
+                self.end_reached = True
+                return None
 
-        elif question == "terrain":
-            return "area"
-
-        elif question == "circuit":
-            self.end_reached = True
-            return None
-
-        elif question == "area":
-            self.end_reached = True
-            return None
-
-        else:
-            return None
+            else:
+                return None

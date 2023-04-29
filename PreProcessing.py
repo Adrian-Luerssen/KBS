@@ -1,7 +1,7 @@
 #import sklearn
 import nltk
 from nltk import LancasterStemmer
-from nltk.corpus import stopwords
+from nltk.corpus import stopwords, wordnet
 from nltk.tokenize import RegexpTokenizer
 
 
@@ -41,3 +41,18 @@ def preProcessing(string):
 def spellcheck(word, max_distance=2):
 
     return word
+
+
+def synonym_antonym_extractor(word):
+
+    # create a dictionary of the original words and their synonyms
+    synonyms = []
+    for syn in wordnet.synsets(word):
+        for l in syn.lemmas():
+            synonyms.append(preProcessing(l.name())[0])
+
+
+
+
+    return synonyms
+
