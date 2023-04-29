@@ -125,8 +125,8 @@ class questions:
 
     def saveAnswer(self, question, response):
         if question == "price":
-            self.profile.limit["price"] = self.profile.max_price
-            self.profile.limit["price_min"] = self.profile.min_price
+            self.profile.limit["price"] = str(self.profile.max_price)
+            self.profile.limit["price_min"] = str(self.profile.min_price)
         elif question == "priority":
             if "spac" in response:
                 self.profile.limit["doors"] = "4"
@@ -267,11 +267,22 @@ class questions:
         else:
             print("OUT: Based on your answers, we recommend the following cars:")
 
-        r = (len(results) if len(results) < 5 else 5)
-        for i in range(0, len(results)):
+        r = (len(results) if len(results) < 10 else 10)
+        for i in range(0, r):
             # print(results[i])
             print(f"{i + 1}). The {results[i][self.dao.columns.index('year')]} {results[i][self.dao.columns.index('make')]} {results[i][self.dao.columns.index('model')]} with {results[i][self.dao.columns.index('transmission')]} transmission, its"
                   f" a {results[i][self.dao.columns.index('size')]} {' '.join(results[i][self.dao.columns.index('category')].split(';'))} {results[i][self.dao.columns.index('style')]} for ${results[i][self.dao.columns.index('price')]} with a score of {results[i][self.dao.columns.index('score')]} ")
+
+        print("\nOUT: Which one interests you the most?\n")
+        response = input("IN: ")
+        while (not(response.isdigit()) or  int(response) > r):
+            if not(response.isdigit()):
+                print("OUT: Sorry i didn't understand that, please try again")
+            else:
+                print("OUT: Sorry that is not an option, please try again")
+
+        #show info about car
+        self.dao.showCarInfo(results[int(response)-1][self.dao.columns.index('index')])
     def decisionTree(self, response, question):
         if question == "":
             return "price"
