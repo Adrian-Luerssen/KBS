@@ -1,3 +1,4 @@
+import pandas as pd
 class DAO:
     columns = ["make", "model", "fuel_type", "hp", "cylinders", "transmission", "driven_wheels", "doors", "category",
                "size", "style", "highway_mpg", "city_mpg", "popularity", "year", "price"]
@@ -7,7 +8,6 @@ class DAO:
         self.path = datapath
         self.readData()
     def readData(self):
-        import pandas as pd
         # make  model	year	fuel_type	hp	cylinders	transmission	driven_wheels	doors	category	size	style	highway_mpg	city_mpg	popularity	price
 
         pd.set_option('display.max_columns', 5000)
@@ -19,19 +19,32 @@ class DAO:
         # print(cars_test[(cars_test["Transmission Type"] == "AUTOMATIC") & (cars_test["Make"] == "Volvo") & (cars_test["Model"] == "V60")])
         # print(cars_test.describe())
         # print(cars_test.groupby(["Make", "Model", "Engine Fuel Type", "Transmission Type", ])["Year"].max())
-        cars_test = cars_test.groupby(
-            ["make", "model", "fuel_type", "hp", "cylinders", "transmission", "driven_wheels", "doors", "category", "size", "style",
-             "highway_mpg", "city_mpg", "popularity", "price"])["year"].max()
-        cars_test = cars_test.reset_index()
-        cars_test = cars_test.groupby(
-            ["make", "model", "fuel_type", "hp", "cylinders", "transmission", "driven_wheels", "doors", "category", "size", "style",
-             "highway_mpg", "city_mpg", "popularity", "year"])["price"].max()
-        # print(cars_test_clean[cars_test_clean["Transmission Type"] == "MANUAL"])
-        cars_test_clean = cars_test.reset_index()
+
         # print(cars_test_clean[cars_test_clean["Make"] == "Maserati"]["Market Category"])
-        self.cars_test = cars_test_clean
+        self.cars_test = cars_test
         # show all cars from 2017 that are automatic
         # print(cars_test_clean[cars_test_clean["Year"] == 2017])
+        self.normalise()
+
+    def normalise(self):
+        norm = pd.get_dummies(self.cars_test, columns=['fuel_type', 'transmission', 'driven_wheels', 'size', 'style'])
+        norm["fuel_type"] = self.cars_test["fuel_type"]
+        norm["transmission"] = self.cars_test["transmission"]
+        norm["driven_wheels"] = self.cars_test["driven_wheels"]
+        norm["size"] = self.cars_test["size"]
+        norm["style"] = self.cars_test["style"]
+        #do a max min normalisation on the price, highway_mpg, city_mpg, popularity, year, hp, cylinders, doors
+        norm["price_norm"] = (norm["price"] - norm["price"].min()) / (norm["price"].max() - norm["price"].min())
+        norm["highway_mpg_norm"] = (norm["highway_mpg"] - norm["highway_mpg"].min()) / (norm["highway_mpg"].max() - norm["highway_mpg"].min())
+        norm["city_mpg_norm"] = (norm["city_mpg"] - norm["city_mpg"].min()) / (norm["city_mpg"].max() - norm["city_mpg"].min())
+        norm["popularity_norm"] = (norm["popularity"] - norm["popularity"].min()) / (norm["popularity"].max() - norm["popularity"].min())
+        norm["year_norm"] = (norm["year"] - norm["year"].min()) / (norm["year"].max() - norm["year"].min())
+        norm["hp_norm"] = (norm["hp"] - norm["hp"].min()) / (norm["hp"].max() - norm["hp"].min())
+        norm["cylinders_norm"] = (norm["cylinders"] - norm["cylinders"].min()) / (norm["cylinders"].max() - norm["cylinders"].min())
+        norm["doors_norm"] = (norm["doors"] - norm["doors"].min()) / (norm["doors"].max() - norm["doors"].min())
+        #print(norm.head())
+        self.cars_test = norm.reset_index()
+        #print(self.cars_test.keys())
 
     def search(self, searchTerm):
         print("searching for: ", searchTerm)
