@@ -274,6 +274,20 @@ class DAO:
             })
         with open('data/answers.json', 'w') as outfile:
             json.dump(data, outfile)
+
+    def dataAnalysis(self):
+        import matplotlib.pyplot as plt
+        import seaborn as sns
+        import os
+        data = self.cars_test.copy()
+        data = data.drop(columns=["make","model","category","fuel_type","transmission","driven_wheels","size","style","index","price_norm","year_norm","hp_norm","highway_mpg_norm","city_mpg_norm","popularity_norm","doors_norm","cylinders_norm"])
+        fig, axes = plt.subplots(1, 1, figsize=(50, 30))
+        sns.heatmap(data.corr(), annot=True)
+        fig.tight_layout()
+        if not os.path.exists("data"):
+            os.makedirs("data")
+        plt.savefig("data/heatmap.png")
+
 #dao = DAO("data/data.csv")
 #dao.readData()
 # dao.search("Bugatti")
