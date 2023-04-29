@@ -22,6 +22,7 @@ stop_words.remove('no')
 stop_words.remove('nor')
 stop_words.remove('but')
 stop_words.remove('against')
+stop_words.add('want')
 tokenizer = RegexpTokenizer(r'\w+')
 lancaster = LancasterStemmer()
 def preProcessing(string,debug=False):
@@ -30,11 +31,13 @@ def preProcessing(string,debug=False):
     tokens = tokenizer.tokenize(string)
     tokens = [w for w in tokens if not w.lower() in stop_words]
     if debug:print(tokens)
-    stemmed = []
+    stemmed = {}
     # TODO: Fix spelling mistakes on input
     for w in tokens:
         if debug:print(w)
-        stemmed.append(lancaster.stem(spellcheck(w)))
+        a = lancaster.stem(spellcheck(w))
+        stemmed[a] = synonym_extractor(a)
+        stemmed[a].append(a)
         # stemmed.append(w.lower())
 
 
@@ -43,7 +46,7 @@ def preProcessing(string,debug=False):
 
 def spellcheck(word,distance_threshold=2,debug=False):
     #if the word is a number, return it
-    if word.isdigit():
+    if word.isdigit() or re.search(r'^(?=.*\d)[a-zA-Z\d]+$', word):
         return word
     if word.lower() not in words.words():
         # find the closest matching word from the set of valid English words
@@ -59,15 +62,15 @@ def spellcheck(word,distance_threshold=2,debug=False):
     return word
 
 
-def synonym_antonym_extractor(word):
+def synonym_extractor(word):
 
     # create a dictionary of the original words and their synonyms
     synonyms = []
     for syn in wordnet.synsets(word):
         for l in syn.lemmas():
-            a= preProcessing(l.name())
+            a= lancaster.stem(l.name())
             if len(a) > 0:
-                synonyms.append(a[0])
+                synonyms.append(a)
 
 
 

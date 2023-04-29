@@ -48,7 +48,7 @@ class questions:
         self.answered["environment"] = False
 
         self.questions["terrain"] = "What type of terrain do you drive on?"
-        self.answerBank["terrain"] = ["city", "highway", "off-road"]
+        self.answerBank["terrain"] = ["city", "highway", "offroad"]
         self.answered["terrain"] = False
 
         self.questions["circuit"] = "Will you take the car to a circuit?"
@@ -66,10 +66,24 @@ class questions:
         self.answered["use"] = False
 
         for key in self.answerBank:
-            for i in range(len(self.answerBank[key])):
-                self.answerBank[key][i] = prep.preProcessing(self.answerBank[key][i])[0]
+            a = self.answerBank[key]
+            self.answerBank[key]={}
+            for i in range(len(a)):
+                new = prep.preProcessing(a[i])
+                self.answerBank[key][list(new.keys())[0]] = list(new.values())[0]
 
         print(self.answerBank)
+    def validWord(self, question, known_word, input):
+        known_synonyms = self.answerBank[question][known_word]
+        # Check if any of the input synonyms coincide with the known synonyms
+        common_synonyms = [value for value in known_synonyms if value in input]
+        #print(input)
+        #print(known_synonyms)
+        if common_synonyms:
+            #print( f"The input word is a synonym of the known word '{known_word}' through the following synonyms: {common_synonyms}")
+            return True
+
+        return False
 
     def obtainPriceRange(self, question, response):
         lst = []
@@ -79,11 +93,11 @@ class questions:
         while pos < len(response) - 1:
             # print(response)
             if re.search("^[0-9]*$", response[pos]):
-                if "thousand" == response[pos + 1]:
+                if "thousand" == response[pos + 1] or "k" == response[pos + 1]:
                     response[pos] = response[pos] + "k"
                     response = response[:pos + 1] + response[pos + 2:]
-                elif "k" == response[pos + 1]:
-                    response[pos] = response[pos] + "k"
+                elif  "m" == response[pos + 1] or "million" == response[pos + 1]:
+                    response[pos] = response[pos] + "m"
                     response = response[:pos + 1] + response[pos + 2:]
             pos += 1
 
@@ -91,6 +105,8 @@ class questions:
         for tok in response:
             if re.search("[0-9]k", tok) or re.search("[0-9]thousand", tok):
                 lst.append(float(tok.replace("k", "").replace("thousand", "")) * 1000)
+            elif re.search("[0-9]m", tok) or re.search("[0-9]million", tok):
+                lst.append(float(tok.replace("mil", "").replace("m", "")) * 1000000)
             elif re.search("[0-9]", tok):
                 lst.append(float(tok))
         print(lst)
@@ -127,84 +143,93 @@ class questions:
         if question == "price":
             self.profile.limit["price"] = str(self.profile.max_price)
             self.profile.limit["price_min"] = str(self.profile.min_price)
-        elif question == "priority":
-            if "spac" in response:
-                self.profile.limit["doors"] = "4"
-                self.profile.limit["size"] = "large,midsize"
-            if "efficy" in response:
-                self.mpg = "high"
-            if "fun" in response:
-                self.profile.limit["hp"] = "high"
-            if "fast" in response:
-                self.profile.limit["hp"] = "high"
-                self.profile.limit["category"] = "exotic,factory tuner,performance,high-performance"
-            if "saf" in response:
-                self.profile.limit["year"] = "2012"
-            if "rely" in response:
-                self.profile.limit["year"] = "2014"
-                self.profile.limit["transmission"] = "automatic"
-        elif question == "environment":
-            if "fast" in response:
-                self.profile.limit["hp"] = "high"
-                self.profile.limit["category"] = "exotic,factory tuner,performance"
-            if "eco" in response or "friend" in response or "efficy" in response:
-                self.profile.limit["mpg"] = "high"
-                self.profile.limit["fuel_type"] = "electric"
-            if "balanc" in response:
-                self.profile.limit["hp"] = "high"
-        elif question == "terrain":
-            if "city" in response:
-                self.profile.limit["city_mpg"] = "high"
-            if "highway" in response:
-                self.profile.limit["highway_mpg"] = "high"
-            if "off-road" in response:
-                self.profile.limit["driven_wheels"] = "all wheel drive,four wheel drive"
-        elif question == "circuit":
-            if "ye" in response:
-                self.profile.limit["cylinders"] = "high"
-                #self.profile.limit["transmission"] = "manual"
-        elif question == "area":
-            if "urb" in response:
-                self.profile.limit["category"] = "hybrid,luxury,hatchback"
-                if self.mpg == "high":
+            return
+
+        for word,synonyms in response.items():
+            print(synonyms)
+            if question == "priority":
+                #print(self.validWord(question, "", synonyms))
+                if self.validWord(question, "spac", synonyms):
+                    self.profile.limit["doors"] = "4"
+                    self.profile.limit["size"] = "large,midsize"
+                if self.validWord(question, "efficy", synonyms):
+                    self.mpg = "high"
+                if self.validWord(question, "fun", synonyms):
+                    self.profile.limit["hp"] = "high"
+                if self.validWord(question, "fast", synonyms):
+                    self.profile.limit["hp"] = "high"
+                    self.profile.limit["category"] = "exotic,factory tuner,performance,high-performance"
+                if self.validWord(question, "saf", synonyms):
+                    self.profile.limit["year"] = "2012"
+                if self.validWord(question, "rely", synonyms):
+                    self.profile.limit["year"] = "2014"
+                    self.profile.limit["transmission"] = "automatic"
+            elif question == "environment":
+                if self.validWord(question, "fast", synonyms):
+                    self.profile.limit["hp"] = "high"
+                    self.profile.limit["category"] = "exotic,factory tuner,performance"
+                if self.validWord(question, "eco", synonyms) or self.validWord(question, "friend", synonyms) or self.validWord(question, "efficy", synonyms):
+                    self.profile.limit["mpg"] = "high"
+                    self.profile.limit["fuel_type"] = "electric"
+                if self.validWord(question, "bal", synonyms):
+                    self.profile.limit["hp"] = "high"
+            elif question == "terrain":
+                if self.validWord(question, "city", synonyms):
                     self.profile.limit["city_mpg"] = "high"
-            if "suburb" in response:
-                self.profile.limit["category"] = "crossover,hatchback,luxury"
-                if self.mpg == "high":
+                if self.validWord(question, "highway", synonyms):
                     self.profile.limit["highway_mpg"] = "high"
-            if "rur" in response:
-                self.profile.limit["category"] = "crossover"
-                if self.mpg == "high":
-                    self.profile.limit["highway_mpg"] = "high"
-        elif question == "use":
-            if "grocery" in response:
-                self.profile.limit["category"] = "hybrid,hatchback"
-                self.profile.limit["size"] = "midsize"
-            if "commut" in response:
-                self.profile.limit["category"] = "hybrid,luxury,hatchback"
-            if "famy" in response:
-                self.profile.limit["category"] = "crossover,hatchback,luxury"
-                self.profile.limit["size"] = "midsize,large"
-            if "sports" in response:
-                self.profile.limit["category"] = "crossover"
-            if "work" in response:
-                self.profile.limit["category"] = "hybrid,hatchback"
-                self.profile.limit["size"] = "midsize,large"
-            if "travel" in response:
-                self.profile.limit["category"] = "luxury"
-                self.profile.limit["mpg"] = "high"
+                if self.validWord(question, "offroad", synonyms):
+                    self.profile.limit["driven_wheels"] = "all wheel drive,four wheel drive"
+            elif question == "circuit":
+                if self.validWord(question, "ye", synonyms):
+                    self.profile.limit["cylinders"] = "high"
+                    #self.profile.limit["transmission"] = "manual"
+            elif question == "area":
+                if self.validWord(question, "urb", synonyms):
+                    self.profile.limit["category"] = "hybrid,luxury,hatchback"
+                    if self.mpg == "high":
+                        self.profile.limit["city_mpg"] = "high"
+                if self.validWord(question, "suburb", synonyms):
+                    self.profile.limit["category"] = "crossover,hatchback,luxury"
+                    if self.mpg == "high":
+                        self.profile.limit["highway_mpg"] = "high"
+                if self.validWord(question, "rur", synonyms):
+                    self.profile.limit["category"] = "crossover"
+                    if self.mpg == "high":
+                        self.profile.limit["highway_mpg"] = "high"
+            elif question == "use":
+                if self.validWord(question, "grocery", synonyms):
+                    self.profile.limit["category"] = "hybrid,hatchback"
+                    self.profile.limit["size"] = "midsize"
+                if self.validWord(question, "commut", synonyms):
+                    self.profile.limit["category"] = "hybrid,luxury,hatchback"
+                if self.validWord(question, "famy", synonyms):
+                    self.profile.limit["category"] = "crossover,hatchback,luxury"
+                    self.profile.limit["size"] = "midsize,large"
+                if self.validWord(question, "sports", synonyms):
+                    self.profile.limit["category"] = "crossover"
+                if self.validWord(question, "work", synonyms):
+                    self.profile.limit["category"] = "hybrid,hatchback"
+                    self.profile.limit["size"] = "midsize,large"
+                if self.validWord(question, "travel", synonyms):
+                    self.profile.limit["category"] = "luxury"
+                    self.profile.limit["mpg"] = "high"
+
 
     def responseIsValid(self, question, response):
         if question == "price":
             return self.obtainPriceRange(question, response)
         else:
-            for token in response:
-                if token in self.answerBank[question]:
-                    return True
-                print(prep.synonym_antonym_extractor(token))
-                for synonym in prep.synonym_antonym_extractor(token):
-                    #print(synonym, self.answerBank[question])
-                    if synonym in self.answerBank[question]:
+            for token, synonyms in response.items():
+                #print(token)
+                #if token in self.answerBank[question]:
+                #    return True
+                #print(synonyms)
+                #print("vs")
+                #print(self.answerBank[question])
+
+                for answer in self.answerBank[question]:
+                    if self.validWord(question, answer, synonyms):
                         return True
 
 
@@ -256,6 +281,7 @@ class questions:
 
                 self.saveAnswer(question, response)
                 print("saved")
+                print(self.profile.limit)
 
         # output car that fits the most
         print("OUT: Here is the car that fits you the best: ")
@@ -271,7 +297,7 @@ class questions:
         for i in range(0, r):
             # print(results[i])
             print(f"{i + 1}). The {results[i][self.dao.columns.index('year')]} {results[i][self.dao.columns.index('make')]} {results[i][self.dao.columns.index('model')]} with {results[i][self.dao.columns.index('transmission')]} transmission, its"
-                  f" a {results[i][self.dao.columns.index('size')]} {' '.join(results[i][self.dao.columns.index('category')].split(';'))} {results[i][self.dao.columns.index('style')]} for ${results[i][self.dao.columns.index('price')]} with a score of {results[i][self.dao.columns.index('score')]} ")
+                  f" a {results[i][self.dao.columns.index('size')]} {' '.join(results[i][self.dao.columns.index('category')].split(';'))} {results[i][self.dao.columns.index('style')]} for ${results[i][self.dao.columns.index('price')]} with a score of {results[i][self.dao.columns.index('score_x')]} ")
 
         print("\nOUT: Which one interests you the most?\n")
         response = input("IN: ")
@@ -288,9 +314,7 @@ class questions:
             return "price"
         if question == "price":
             return "priority"
-        for word in response:
-            synonyms = prep.synonym_antonym_extractor(word)
-            synonyms.append(word)
+        for word,synonyms in response.items():
 
             if question == "priority":
                 if "rely" in synonyms:
