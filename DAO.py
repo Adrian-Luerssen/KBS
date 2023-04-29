@@ -1,4 +1,6 @@
 import pandas as pd
+import json
+from datetime import datetime
 pd.options.mode.chained_assignment = None
 class DAO:
     columns = []
@@ -147,17 +149,18 @@ class DAO:
     def getWeight(self,search_terms):
         weight={}
         for key, value in search_terms.items():
-            #print("filtering by", key, ":", value)
-            if key+"_norm" in self.cars_test.keys():
-                if str(value).lower() == "high":
-                    weight[key+"_norm"] = 3
-                elif str(value).lower() == "any":
-                    weight[key+"_norm"] = 1
-                elif str(value).lower() == "low":
-                    weight[key+"_norm"] = 0.5
-            #print(self.cars_test.keys())
-            if key+"_"+str(value).lower() in self.cars_test.keys():
-                weight[key+"_"+str(value).lower()] = 3
+            for val in value.split(","):
+                #print("filtering by", key, ":", value)
+                if key+"_norm" in self.cars_test.keys():
+                    if str(val).lower() == "high":
+                        weight[key+"_norm"] = 3
+                    elif str(val).lower() == "any":
+                        weight[key+"_norm"] = 1
+                    elif str(val).lower() == "low":
+                        weight[key+"_norm"] = 0.5
+                #print(self.cars_test.keys())
+                if key+"_"+str(val).lower() in self.cars_test.keys():
+                    weight[key+"_"+str(val).lower()] = 3
 
 
 
@@ -220,10 +223,57 @@ class DAO:
         self.columns = matching_cars.columns.tolist()
         #print(self.columns)
         return matching_cars.sort_values(by="score_x", ascending=False).head(10).values.tolist()
-    def showCarInfo(self, car):
-        print("Showing car info...")
-        print(self.cars_test.loc[self.cars_test["index"] == car])
 
+    def showCarInfo(self,car):
+        print("Showing car info...")
+        car_data = self.cars_test.loc[self.cars_test["index"] == car]
+
+        # Extract information from the DataFrame
+        make = car_data["make"].values[0]
+        model = car_data["model"].values[0]
+        year = car_data["year"].values[0]
+        hp = car_data["hp"].values[0]
+        cylinders = car_data["cylinders"].values[0]
+        doors = car_data["doors"].values[0]
+        category = " ".join(car_data["category"].values[0].split(";"))
+        highway_mpg = car_data["highway_mpg"].values[0]
+        city_mpg = car_data["city_mpg"].values[0]
+        popularity = car_data["popularity"].values[0]
+        price = car_data["price"].values[0]
+        fuel_type = car_data["fuel_type"].values[0]
+        transmission = car_data["transmission"].values[0]
+        driven_wheels = car_data["driven_wheels"].values[0]
+        size = car_data["size"].values[0]
+        style = car_data["style"].values[0]
+
+        # Print the information in a nice format
+        print(f"Make: {make}")
+        print(f"Model: {model}")
+        print(f"Year: {year}")
+        print(f"Horsepower: {hp}")
+        print(f"Cylinders: {cylinders}")
+        print(f"Doors: {doors}")
+        print(f"Category: {category}")
+        print(f"Highway MPG: {highway_mpg}")
+        print(f"City MPG: {city_mpg}")
+        print(f"Popularity: {popularity}")
+        print(f"Price: ${price}")
+        print(f"Fuel Type: {fuel_type}")
+        print(f"Transmission: {transmission}")
+        print(f"Driven Wheels: {driven_wheels}")
+        print(f"Size: {size}")
+        print(f"Style: {style}")
+    def saveCarInfo(self,car,filters):
+        #save answer information to answers.json with timestamp
+        with open('data/answers.json') as json_file:
+            data = json.load(json_file)
+            data.append({
+                "timestamp": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+                "filters": filters,
+                "car": car
+            })
+        with open('data/answers.json', 'w') as outfile:
+            json.dump(data, outfile)
 #dao = DAO("data/data.csv")
 #dao.readData()
 # dao.search("Bugatti")

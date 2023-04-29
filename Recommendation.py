@@ -89,6 +89,8 @@ class questions:
         lst = []
         # print(response)
         # join thousand or k to the number
+        # get all tokens as list
+        response = list(response.keys())
         pos = 0
         while pos < len(response) - 1:
             # print(response)
@@ -309,6 +311,7 @@ class questions:
 
         #show info about car
         self.dao.showCarInfo(results[int(response)-1][self.dao.columns.index('index')])
+        self.dao.saveCarInfo(results[int(response)-1][self.dao.columns.index('index')],self.profile.limit)
     def decisionTree(self, response, question):
         if question == "":
             return "price"
@@ -317,28 +320,28 @@ class questions:
         for word,synonyms in response.items():
 
             if question == "priority":
-                if "rely" in synonyms:
+                if self.validWord(question, "rely", synonyms):
                     return "terrain"
-                elif "efficy" in synonyms:
+                elif self.validWord(question, "efficy", synonyms):
                     return "terrain"
-                elif "fast" in synonyms:
+                elif self.validWord(question, "fast", synonyms):
                     return "environment"
-                elif "fun" in synonyms:
+                elif self.validWord(question, "fun", synonyms):
                     return "environment"
-                elif "spac" in synonyms:
+                elif self.validWord(question, "spac", synonyms):
                     return "area"
-                elif "us" in synonyms:
+                elif self.validWord(question, "us", synonyms):
                     return "use"
-                elif "safety" in synonyms:
+                elif self.validWord(question, "rely", synonyms):
                     return "use"
 
             elif question == "use":
                 return "environment"
 
             elif question == "environment":
-                if "efficy" in synonyms or "friend" in synonyms or "eco" in synonyms or "bal" in synonyms:
+                if self.validWord(question, "eco", synonyms) or self.validWord(question, "friend", synonyms) or self.validWord(question, "efficy", synonyms):
                     return "terrain"
-                elif "fast" in synonyms:
+                elif self.validWord(question, "fast", synonyms):
                     return "circuit"
 
             elif question == "terrain":
