@@ -1,7 +1,6 @@
 import pandas as pd
 class DAO:
-    columns = ["make", "model", "fuel_type", "hp", "cylinders", "transmission", "driven_wheels", "doors", "category",
-               "size", "style", "highway_mpg", "city_mpg", "popularity", "year", "price"]
+    columns = []
 
     def __init__(self, datapath):
         self.cars_test = None
@@ -19,12 +18,36 @@ class DAO:
         # print(cars_test[(cars_test["Transmission Type"] == "AUTOMATIC") & (cars_test["Make"] == "Volvo") & (cars_test["Model"] == "V60")])
         # print(cars_test.describe())
         # print(cars_test.groupby(["Make", "Model", "Engine Fuel Type", "Transmission Type", ])["Year"].max())
+        cars_test_clean = cars_test.groupby(
+            ["make", "model", "fuel_type", "cylinders", "transmission", "driven_wheels", "doors", "category",
+             "size", "style"])["year"].max()
+        cars_test_clean = cars_test_clean.reset_index()
+        cars_test_clean = pd.merge(cars_test_clean, cars_test[
+            ["make", "model", "fuel_type", "cylinders", "transmission", "driven_wheels", "doors", "category",
+             "size", "style", "price", "year"]],
+                             on=["make", "model", "fuel_type", "cylinders", "transmission", "driven_wheels", "doors",
+                                 "category", "size", "style","year"], how="left")
+        cars_test_clean = cars_test_clean.groupby(
+            ["make", "model", "fuel_type", "cylinders", "transmission", "driven_wheels", "doors", "category",
+             "size", "style", "year"])["price"].max()
+        cars_test_clean = cars_test_clean.reset_index()
+
+        cars_test_clean = pd.merge(cars_test_clean, cars_test[
+            ["make", "model", "fuel_type", "cylinders", "transmission", "driven_wheels", "doors", "category",
+             "size", "style", "price", "year","hp","highway_mpg","city_mpg","popularity"]],
+                                   on=["make", "model", "fuel_type", "cylinders", "transmission", "driven_wheels",
+                                       "doors",
+                                       "category", "size", "style", "year","price"], how="left")
 
         # print(cars_test_clean[cars_test_clean["Make"] == "Maserati"]["Market Category"])
         self.cars_test = cars_test
         # show all cars from 2017 that are automatic
         # print(cars_test_clean[cars_test_clean["Year"] == 2017])
         self.normalise()
+        self.cars_test.columns = self.cars_test.columns.str.lower()
+        self.columns = self.cars_test.columns.tolist()
+        self.columns.append("score");
+        print(self.columns)
 
     def normalise(self):
         norm = pd.get_dummies(self.cars_test, columns=['fuel_type', 'transmission', 'driven_wheels', 'size', 'style'])
@@ -111,12 +134,45 @@ class DAO:
 
         # return cars as a list
         return matching_cars.head(10).values.tolist()
-        # for key, value in term.items():
-        # if value.lower() != "any":
-        # matching_cars = matching_cars[matching_cars[key].apply(lambda x: str(value).lower() in str(x).lower())]
 
-        # print(matching_cars["make"].apply(lambda x: userInput.lower() in str(x).lower()))
 
+    def searchCarsByPriority(self,search_terms):
+        #search based on priorities
+        #calculate a score per car and return those with the highest score
+        print("searching for cars...")
+        matching_cars = self.cars_test
+        normCols = ["city_mpg_norm", "popularity_norm", "hp_norm", "cylinders_norm", "doors_norm"]
+        # print(search_terms)
+        for key, value in search_terms.items():
+            # print("filtering by", key, ":", value)
+            if str(value).lower() != "any":
+                if key == "year" :
+                    matching_cars = matching_cars[matching_cars[key] >= int(value)]
+                    normCols.append("year_norm")
+                elif key == "price":
+                    matching_cars = matching_cars[matching_cars[key] <= int(value)]
+                elif key == "price_min":
+                    matching_cars = matching_cars[matching_cars["price"] >= int(value)]
+                elif key == "doors" or key == "city_mpg" or key == "popularity" or key == "hp" or key == "cylinders":
+                    normCols.append(key+"_norm")
+                elif key == "fuel_type" or key == "transmission" or key == "driven_wheels" or key == "size" or key == "style":
+                    normCols.append(key+"_"+value.lower())
+
+
+                else:
+                    print(key, value)
+
+                    # matching_cars = [matching_cars[key].apply(lambda x: str(x).lower() in value.split(","))]
+            # print("No matching cars found." if matching_cars.empty else ("Matching cars:", matching_cars.head(10)))
+        scores = []
+        for i, row in matching_cars.iterrows():
+            score = sum(row[key] for key in normCols if key in row.index)
+            scores.append(score)
+
+        matching_cars["score"] = scores
+        # return cars as a list
+
+        return matching_cars.sort_values(by="score", ascending=False).head(10).values.tolist()
 
 #dao = DAO("data/data.csv")
 #dao.readData()

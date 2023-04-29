@@ -260,7 +260,7 @@ class questions:
         # output car that fits the most
         print("OUT: Here is the car that fits you the best: ")
         print(self.profile.limit)
-        results = self.dao.searchCarsByParameters(self.profile.limit)
+        results = self.dao.searchCarsByPriority(self.profile.limit)
         if len(results) == 0:
             print("OUT: Sorry we couldn't find a car that fits you, please try again")
             return 0
@@ -271,8 +271,7 @@ class questions:
         for i in range(0, len(results)):
             # print(results[i])
             print(f"{i + 1}). The {results[i][self.dao.columns.index('year')]} {results[i][self.dao.columns.index('make')]} {results[i][self.dao.columns.index('model')]} with {results[i][self.dao.columns.index('transmission')]} transmission, its"
-                  f" a {results[i][self.dao.columns.index('size')]} {' '.join(results[i][self.dao.columns.index('category')].split(';'))} {results[i][self.dao.columns.index('style')]} for ${results[i][self.dao.columns.index('price')]}")
-
+                  f" a {results[i][self.dao.columns.index('size')]} {' '.join(results[i][self.dao.columns.index('category')].split(';'))} {results[i][self.dao.columns.index('style')]} for ${results[i][self.dao.columns.index('price')]} with a score of {results[i][self.dao.columns.index('score')]} ")
     def decisionTree(self, response, question):
         if question == "":
             return "price"
