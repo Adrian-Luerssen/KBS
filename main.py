@@ -3,7 +3,7 @@ import Recommendation as rec
 import PreProcessing as pre
 
 
-q = rec.questions()
+q = rec.questions(debug=True)
 q.askQuestions()
 
 

@@ -19,9 +19,9 @@ class profile:
 
 
 class questions:
-    def __init__(self):
+    def __init__(self, debug=False):
         self.profile = profile()
-
+        self.debug = debug
         self.dao = DAO.DAO("data/data.csv")
 
         for parameter in self.dao.columns:
@@ -72,28 +72,28 @@ class questions:
                 new = prep.preProcessing(a[i])
                 self.answerBank[key][list(new.keys())[0]] = list(new.values())[0]
 
-        print(self.answerBank)
+        if self.debug:(self.answerBank)
     def validWord(self, question, known_word, input):
         known_synonyms = self.answerBank[question][known_word]
         # Check if any of the input synonyms coincide with the known synonyms
         common_synonyms = [value for value in known_synonyms if value in input]
-        #print(input)
-        #print(known_synonyms)
+        #if self.debug:(input)
+        #if self.debug:(known_synonyms)
         if common_synonyms:
-            #print( f"The input word is a synonym of the known word '{known_word}' through the following synonyms: {common_synonyms}")
+            #if self.debug:( f"The input word is a synonym of the known word '{known_word}' through the following synonyms: {common_synonyms}")
             return True
 
         return False
 
     def obtainPriceRange(self, question, response):
         lst = []
-        # print(response)
+        # if self.debug:(response)
         # join thousand or k to the number
         # get all tokens as list
         response = list(response.keys())
         pos = 0
         while pos < len(response) - 1:
-            # print(response)
+            # if self.debug:(response)
             if re.search("^[0-9]*$", response[pos]):
                 if "thousand" == response[pos + 1] or "k" == response[pos + 1]:
                     response[pos] = response[pos] + "k"
@@ -103,7 +103,7 @@ class questions:
                     response = response[:pos + 1] + response[pos + 2:]
             pos += 1
 
-        # print(response)
+        # if self.debug:(response)
         for tok in response:
             if re.search("[0-9]k", tok) or re.search("[0-9]thousand", tok):
                 lst.append(float(tok.replace("k", "").replace("thousand", "")) * 1000)
@@ -111,7 +111,7 @@ class questions:
                 lst.append(float(tok.replace("mil", "").replace("m", "")) * 1000000)
             elif re.search("[0-9]", tok):
                 lst.append(float(tok))
-        print(lst)
+        if self.debug:(lst)
         if (len(lst)) == 0:
             self.answered[question] = False
             return False
@@ -130,7 +130,7 @@ class questions:
 
     def getResponse(self, question, response):
         self.answered[question] = True
-        print(response)
+        if self.debug:(response)
         for token in response:
             if token in self.answerBank[question]:
                 if question == "priority":
@@ -148,9 +148,9 @@ class questions:
             return
 
         for word,synonyms in response.items():
-            print(synonyms)
+            if self.debug:(synonyms)
             if question == "priority":
-                #print(self.validWord(question, "", synonyms))
+                #if self.debug:(self.validWord(question, "", synonyms))
                 if self.validWord(question, "spac", synonyms):
                     self.profile.limit["doors"] = "4"
                     self.profile.limit["size"] = "large,midsize"
@@ -223,12 +223,12 @@ class questions:
             return self.obtainPriceRange(question, response)
         else:
             for token, synonyms in response.items():
-                #print(token)
+                #if self.debug:(token)
                 #if token in self.answerBank[question]:
                 #    return True
-                #print(synonyms)
-                #print("vs")
-                #print(self.answerBank[question])
+                #if self.debug:(synonyms)
+                #if self.debug:("vs")
+                #if self.debug:(self.answerBank[question])
 
                 for answer in self.answerBank[question]:
                     if self.validWord(question, answer, synonyms):
@@ -241,13 +241,13 @@ class questions:
         # give the next question
         return self.decisionTree(response, question)
 
-        # print("Min price: ", self.profile.min_price)
-        # print("Max price: ", self.profile.max_price)
-        # print("Priorities: ", self.profile.priorities)
-        # print("Limits: ", self.profile.limit)
+        # if self.debug:("Min price: ", self.profile.min_price)
+        # if self.debug:("Max price: ", self.profile.max_price)
+        # if self.debug:("Priorities: ", self.profile.priorities)
+        # if self.debug:("Limits: ", self.profile.limit)
 
         # TODO: properly recommend the next question based on the response and the question answered
-        # A.K.A Do the Decision tree instead of printing all questions below
+        # A.K.A Do the Decision tree instead of if self.debug:ing all questions below
 
         # for q in self.answerBank:
         # if not self.answered[self.questionToKey[q]]:
@@ -255,11 +255,11 @@ class questions:
 
     def save_info(self, question, response):
         # TODO: use sentiment analysis to determine the priority of the response
-        print()
+        if self.debug:()
 
     def askQuestions(self):
-        print("\n\n\t ****** DEBUG MODE ****** \n\nWelcome to the car recommendation system!")
-        print("Please answer the following questions to help us find the best car for you!")
+        if self.debug:("\n\n\t ****** DEBUG MODE ****** \n\nWelcome to the car recommendation system!")
+        if self.debug:("Please answer the following questions to help us find the best car for you!")
         question = ""
         response = ""
 
@@ -271,7 +271,7 @@ class questions:
             if question is not None:
                 print("OUT:", self.questions[question])
                 response = prep.preProcessing(input("IN: "))
-                print(response)
+                if self.debug:(response)
 
                 # check if response is valid
                 while not self.responseIsValid(question, response):
@@ -279,15 +279,15 @@ class questions:
                     print("")
                     print("OUT:", self.questions[question])
                     response = prep.preProcessing(input("IN: "))
-                    print(response)
+                    if self.debug:(response)
 
                 self.saveAnswer(question, response)
-                print("saved")
-                print(self.profile.limit)
+                if self.debug:("saved")
+                if self.debug:(self.profile.limit)
 
         # output car that fits the most
         print("OUT: Here is the car that fits you the best: ")
-        print(self.profile.limit)
+        if self.debug:(self.profile.limit)
         results = self.dao.searchCarsByPriority(self.profile.limit)
         if len(results) == 0:
             print("OUT: Sorry we couldn't find a car that fits you, please try again")
