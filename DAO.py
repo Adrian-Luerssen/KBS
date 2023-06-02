@@ -155,7 +155,7 @@ class DAO:
                     if str(val).lower() == "high":
                         weight[key+"_norm"] = 3
                     elif str(val).lower() == "any":
-                        weight[key+"_norm"] = 1
+                        weight[key+"_norm"] = 0
                     elif str(val).lower() == "low":
                         weight[key+"_norm"] = 0.5
                 #print(self.cars_test.keys())

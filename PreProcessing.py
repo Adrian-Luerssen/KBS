@@ -9,12 +9,12 @@ from nltk.metrics import edit_distance
 import re
 with open('data/dictionarySpellcheck') as word_file:
     valid_words = set(word_file.read().split(","))
-#nltk.download('stopwords')
-#nltk.download('punkt')
-#nltk.download('averaged_perceptron_tagger')
-#nltk.download('wordnet')
-#nltk.download('maxent_ne_chunker')
-#nltk.download('words')
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('wordnet')
+nltk.download('maxent_ne_chunker')
+nltk.download('words')
 
 stop_words = set(stopwords.words('english'))
 stop_words.remove('not')
