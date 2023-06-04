@@ -49,8 +49,8 @@ class ChatManager:
         try:
             if not message:
                 raise ValueError("Empty message")
-            username = message['message']['from']['username']
-            name = message['message']['from']['first_name']
+            username = message['message']['from']['username'] if 'username' in message['message']['from'] else None
+            name = message['message']['from']['first_name'] if 'first_name' in message['message']['from'] else "User"
             chat_id = message['message']['chat']['id']
             txt = message['message']['text']
             print("chat_id-->", chat_id)
