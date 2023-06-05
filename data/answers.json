@@ -1,1 +1,1 @@
-[{"timestamp": "30/04/2023 00:17:21", "filters": {"price": "50000.0", "price_min": "0", "highway_mpg": "high", "category": "crossover"}, "car": 10669}]
+[{"timestamp": "30/04/2023 00:17:21", "filters": {"price": "50000.0", "price_min": "0", "highway_mpg": "high", "category": "crossover"}, "car": 10669}, {"timestamp": "02/06/2023 22:55:02", "filters": {"price": "1000000.0", "price_min": "100000.0", "year": "2014", "transmission": "automatic", "highway_mpg": "high", "category": "hybrid,luxury,hatchback"}, "car": 6796}]

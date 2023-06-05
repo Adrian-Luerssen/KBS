@@ -41,7 +41,7 @@ def preProcessing(string, debug=False):
     for w in tokens:
         if debug: print(w)
         a = lancaster.stem(spellcheck(w))
-        stemmed[a] = synonym_extractor(a)
+        stemmed[a] = synonym_extractor(w)
         stemmed[a].append(a)
         # stemmed.append(w.lower())
 
