@@ -29,7 +29,7 @@ class ChatManager:
             'chat_id': _id,
             'text': text
         }
-        print("sending message: ", text)
+        print("sending message: ", text if text is not None else "I encountered an error, please /start again 🤝")
         r = requests.post(url, json=payload)
         return r
 
@@ -113,15 +113,21 @@ class UserChat:
     def gotAnswer(self, answer):
         print("got answer: ", answer)
 
-        if self.q.gotAnswerIsValid(answer):
+        if "bye" in answer or "exit" in answer or "quit" in answer or "stop" in answer:
+            self.chatManager.sendMessage(self.id, "See you!")
+            self.start()
+        elif self.q.gotAnswerIsValid(answer):
             self.q.saveAnswer()
             self.askQuestion()
         else:
-            self.notUnderstood()
+            self.notUnderstood(answer)
 
-    def notUnderstood(self):
+    def notUnderstood(self, answer):
         # call the sendMessage function in the ChatManager class
         self.chatManager.sendMessage(self.id, "Sorry, I didn't understand that. Please try rephrasing your answer or starting again by typing '/start'")
+        with open('data/ignorance.log', 'a') as f:
+            f.write(f"{answer}\n")
+            f.close()
 
     def noResult(self):
         self.chatManager.sendMessage(self.id,

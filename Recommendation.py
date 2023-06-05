@@ -42,27 +42,27 @@ class questions:
         self.questions["price"] = "What is your price range? 💰"
         self.answerBank["price"] = []
         self.answered["price"] = False
-
+        #TODO: add "I don't know" / "I don't care" option
         self.questions["priority"] = "What is your priority when buying a car?"
         self.answerBank["priority"] = ["reliability", "efficiency", "fun",
-                                       "space", "use", "fast", "speed", "safety"]
+                                       "space", "use", "fast", "speed", "safety", "convenience", "comfort", "save", "fuel", "gas", "performance", "size"]
         self.answered["priority"] = False
 
         self.questions["environment"] = "Do you prefer a faster car 🏎️ or an eco-friendly one 🌱?  "
-        self.answerBank["environment"] = ["fast", "eco", "friendly", "efficient", "balanced"]
+        self.answerBank["environment"] = ["fast", "eco", "friendly", "efficient", "balanced", "environment", "economy", "speed", "save", "fuel", "gas"]
         self.answered["environment"] = False
 
         self.questions["terrain"] = "What type of terrain do you drive on? 🏙️⛰️"
-        self.answerBank["terrain"] = ["city", "highway", "offroad"]
+        self.answerBank["terrain"] = ["city", "highway", "offroad", "mountain", "countryside", "urban", "suburb", "rural", "town", "freeway", "road"]
         self.answered["terrain"] = False
 
         self.questions["circuit"] = "Will you take the car to a circuit? 🏎️ 🏁"
         self.answerBank["circuit"] = ["yes", "no"]
         self.answered["circuit"] = False
 
-        self.questions["area"] = "Where do you live? 🏘️🏢🏡"
+        self.questions["area"] = "What type of area do you live in? 🏘️🏢🏡"
         self.answerBank["area"] = ["urban", "suburb",
-                                   "rural"]  # can assume suburb takes highway often and rural takes off-road often
+                                   "rural", "city", "mountain", "countryside", "town"]  # can assume suburb takes highway often and rural takes off-road often
         self.answered["area"] = False
 
         self.questions["use"] = "What are you going to use the car for?"
@@ -80,10 +80,10 @@ class questions:
 
         if self.debug: print(self.answerBank)
 
-    def validWord(self, question, known_word, input):
+    def validWord(self, question, known_word, _input):
         known_synonyms = self.answerBank[question][known_word]
         # Check if any of the input synonyms coincide with the known synonyms
-        common_synonyms = [value for value in known_synonyms if value in input]
+        common_synonyms = [value for value in known_synonyms if value in _input]
         # if self.debug:print(input)
         # if self.debug:print(known_synonyms)
         if common_synonyms:
@@ -166,57 +166,85 @@ class questions:
             if self.debug: print(synonyms)
             if self.question == "priority":
                 # if self.debug:print(self.validWord(question, "", synonyms))
-                if self.validWord(self.question, "spac", synonyms):
+                if self.validWord(self.question, "spac", synonyms)\
+                        or self.validWord(self.question, "siz", synonyms):
                     self.profile.limit["doors"] = "4"
                     self.profile.limit["size"] = "large,midsize"
-                if self.validWord(self.question, "efficy", synonyms):
+                if self.validWord(self.question, "efficy", synonyms)\
+                        or self.validWord(self.question, "sav", synonyms)\
+                        or self.validWord(self.question, "fuel", synonyms)\
+                        or self.validWord(self.question, "gas", synonyms):
                     self.mpg = "high"
                 if self.validWord(self.question, "fun", synonyms):
                     self.profile.limit["hp"] = "high"
-                if self.validWord(self.question, "fast", synonyms) or self.validWord(self.question, "spee",
-                                                                                     synonyms):
+                if self.validWord(self.question, "fast", synonyms) \
+                        or self.validWord(self.question, "spee", synonyms)\
+                        or self.validWord(self.question, "perform", synonyms):
                     self.profile.limit["hp"] = "high"
                     self.profile.limit["category"] = "exotic,factory tuner,performance,high-performance"
-                if self.validWord(self.question, "saf", synonyms):
+                if self.validWord(self.question, "saf", synonyms):  #TODO make it so more modern ones are preferred but not a fixed year cutoff
                     self.profile.limit["year"] = "2012"
-                if self.validWord(self.question, "rely", synonyms):
+                if self.validWord(self.question, "rely", synonyms)\
+                        or self.validWord(self.question, "conveny", synonyms)\
+                        or self.validWord(self.question, "comfort", synonyms): #TODO make it so more modern ones are preferred but not a fixed year cutoff
                     self.profile.limit["year"] = "2014"
                     self.profile.limit["transmission"] = "automatic"
+
             elif self.question == "environment":
-                if self.validWord(self.question, "fast", synonyms):
+                if self.validWord(self.question, "fast", synonyms)\
+                        or self.validWord(self.question, "spee", synonyms):
                     self.profile.limit["hp"] = "high"
                     self.profile.limit["category"] = "exotic,factory tuner,performance"
-                if self.validWord(self.question, "eco", synonyms) or self.validWord(self.question, "friend",
-                                                                                    synonyms) or self.validWord(
-                    self.question, "efficy", synonyms):
+                if self.validWord(self.question, "eco", synonyms) \
+                        or self.validWord(self.question, "environ", synonyms) \
+                        or self.validWord(self.question, "friend", synonyms) \
+                        or self.validWord(self.question, "efficy", synonyms)\
+                        or self.validWord(self.question, "sav", synonyms)\
+                        or self.validWord(self.question, "econom", synonyms):
                     self.profile.limit["mpg"] = "high"
-                    self.profile.limit["fuel_type"] = "electric"
+                    self.profile.limit["fuel_type"] = "electric"    #TODO limit to increase points instead of cutting off?
                 if self.validWord(self.question, "bal", synonyms):
                     self.profile.limit["hp"] = "high"
+
             elif self.question == "terrain":
-                if self.validWord(self.question, "city", synonyms):
+                if self.validWord(self.question, "city", synonyms)\
+                        or self.validWord(self.question, "urb", synonyms)\
+                        or self.validWord(self.question, "town", synonyms):
                     self.profile.limit["city_mpg"] = "high"
-                if self.validWord(self.question, "highway", synonyms):
+                if self.validWord(self.question, "highway", synonyms)\
+                        or self.validWord(self.question, "freeway", synonyms)\
+                        or self.validWord(self.question, "suburb", synonyms):
                     self.profile.limit["highway_mpg"] = "high"
-                if self.validWord(self.question, "offroad", synonyms):
+                if self.validWord(self.question, "offroad", synonyms)\
+                        or self.validWord(self.question, "road", synonyms)\
+                        or self.validWord(self.question, "countrysid", synonyms)\
+                        or self.validWord(self.question, "mountain", synonyms)\
+                        or self.validWord(self.question, "rur", synonyms):
                     self.profile.limit["driven_wheels"] = "all wheel drive,four wheel drive"
+
             elif self.question == "circuit":
                 if self.validWord(self.question, "ye", synonyms):
                     self.profile.limit["cylinders"] = "high"
                     # self.profile.limit["transmission"] = "manual"
+
             elif self.question == "area":
-                if self.validWord(self.question, "urb", synonyms):
+                if self.validWord(self.question, "urb", synonyms)\
+                        or self.validWord(self.question, "city", synonyms):
                     self.profile.limit["category"] = "hybrid,luxury,hatchback"
                     if self.mpg == "high":
                         self.profile.limit["city_mpg"] = "high"
-                if self.validWord(self.question, "suburb", synonyms):
+                if self.validWord(self.question, "suburb", synonyms)\
+                        or self.validWord(self.question, "town", synonyms):
                     self.profile.limit["category"] = "crossover,hatchback,luxury"
                     if self.mpg == "high":
                         self.profile.limit["highway_mpg"] = "high"
-                if self.validWord(self.question, "rur", synonyms):
+                if self.validWord(self.question, "rur", synonyms)\
+                        or self.validWord(self.question, "countrysid", synonyms)\
+                        or self.validWord(self.question, "mountain", synonyms):
                     self.profile.limit["category"] = "crossover"
                     if self.mpg == "high":
                         self.profile.limit["highway_mpg"] = "high"
+
             elif self.question == "use":
                 if self.validWord(self.question, "grocery", synonyms):
                     self.profile.limit["category"] = "hybrid,hatchback"
@@ -226,7 +254,7 @@ class questions:
                 if self.validWord(self.question, "famy", synonyms):
                     self.profile.limit["category"] = "crossover,hatchback,luxury"
                     self.profile.limit["size"] = "midsize,large"
-                if self.validWord(self.question, "sports", synonyms):
+                if self.validWord(self.question, "sport", synonyms):
                     self.profile.limit["category"] = "crossover"
                 if self.validWord(self.question, "work", synonyms):
                     self.profile.limit["category"] = "hybrid,hatchback"
@@ -323,7 +351,7 @@ class questions:
     def getResult(self):
         self.results = self.dao.searchCarsByPriority(self.profile.limit)
         if len(self.results) == 0:
-            return None
+            return "Sorry 😅 I couldn't find a car that fits your requirements, please try again with '/start'"
         else:
             r = (len(self.results) if len(self.results) < 8 else 8)
             recommended_cars = "Based on your answers, I think you would like the following cars:\n\n"
@@ -348,7 +376,7 @@ class questions:
                 )
                 recommended_cars += formatted_car_info
 
-            return recommended_cars + "\nWhich one interests you the most? Please type just the number 🙏"
+            return recommended_cars + "\nWhich one interests you the most? Please type **just the number** 🙏"
 
     def askQuestions(self):
         if self.debug: print("\n\n\t ****** DEBUG MODE ****** \n\n")
@@ -437,27 +465,41 @@ class questions:
             if question == "priority":
                 if self.validWord(question, "rely", synonyms):
                     return "terrain"
-                elif self.validWord(question, "efficy", synonyms):
+                elif self.validWord(question, "efficy", synonyms) \
+                        or self.validWord(self.question, "sav", synonyms) \
+                        or self.validWord(self.question, "fuel", synonyms) \
+                        or self.validWord(self.question, "gas", synonyms):
                     return "terrain"
-                elif self.validWord(question, "fast", synonyms) or self.validWord(question, "spee", synonyms):
+                elif self.validWord(question, "fast", synonyms) \
+                        or self.validWord(question, "spee", synonyms)\
+                        or self.validWord(question, "perform", synonyms):
                     return "environment"
                 elif self.validWord(question, "fun", synonyms):
                     return "environment"
-                elif self.validWord(question, "spac", synonyms):
+                elif self.validWord(question, "spac", synonyms)\
+                        or self.validWord(question, "siz", synonyms):
                     return "area"
                 elif self.validWord(question, "us", synonyms):
                     return "use"
-                elif self.validWord(question, "rely", synonyms):
+                elif self.validWord(question, "rely", synonyms) \
+                        or self.validWord(self.question, "conveny", synonyms) \
+                        or self.validWord(self.question, "comfort", synonyms):
+                    return "use"
+                elif self.validWord(question, "saf", synonyms):
                     return "use"
 
             elif question == "use":
                 return "environment"
 
             elif question == "environment":
-                if self.validWord(question, "eco", synonyms) or self.validWord(question, "friend",
-                                                                               synonyms) or self.validWord(question,
-                                                                                                           "efficy",
-                                                                                                           synonyms):
+                if self.validWord(question, "environ", synonyms) \
+                        or self.validWord(question, "eco", synonyms) \
+                        or self.validWord(question, "friend", synonyms) \
+                        or self.validWord(question, "efficy", synonyms)\
+                        or self.validWord(question, "econom", synonyms) \
+                        or self.validWord(question, "sav", synonyms) \
+                        or self.validWord(question, "fuel", synonyms) \
+                        or self.validWord(question, "gas", synonyms):
                     return "terrain"
                 elif self.validWord(question, "fast", synonyms):
                     return "circuit"

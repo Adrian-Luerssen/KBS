@@ -33,7 +33,9 @@ import Recommendation as rec
 
 
 chatManager = telegramBot.ChatManager(debug=True)
-
+with open('data/answers.json', 'a') as f:
+    f.write("\n\n\n")
+    f.close()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -47,13 +49,12 @@ def index():
         if txt in {"hi", "hello", "howdy", "hola", "hey"}:
             # tel_send_message(chat_id, "Hello, world!")
             chatManager.sendImage(config.BOT_LOGO, chat_id)
-        elif txt == "image":
-            chatManager.sendImage(gis.results()[0].url, chat_id)
         elif txt == "/start":
-            chatManager.sendMessage(chat_id, "Hello! I'm the Car Recommender Bot!\n\nPlease answer the following questions to help me find the best car for you!")
+            chatManager.sendMessage(chat_id, "Hello! I'm the Car Recommender Bot!\n\nPlease answer the following "
+                                             "questions to help me find the best car for you!")
             chatManager.gotMessage(chat_id, txt, name, username)
         else:
-            chatManager.gotMessage(chat_id, txt)
+            chatManager.gotMessage(chat_id, txt, name, username)
 
         return Response('ok', status=200)
     else:
