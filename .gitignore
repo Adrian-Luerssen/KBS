@@ -4,3 +4,10 @@
 *.xml
 adrian.luerssen_sergi.vives_arnau.sf-KBS_prototype.zip
 config.py
+.DS_Store
+.idea/
+__pycache__/
+venv/
+data/heatmap.png
+data/ignorance.log
+data/answers.json
