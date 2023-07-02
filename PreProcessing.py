@@ -12,12 +12,12 @@ with open('data/dictionarySpellcheck') as word_file:
 
 try:
     print("Downloading nltk data...")
-    #nltk.download('stopwords')
-    #nltk.download('punkt')
-    #nltk.download('averaged_perceptron_tagger')
-    #nltk.download('wordnet')
-    #nltk.download('maxent_ne_chunker')
-    #nltk.download('words')
+    nltk.download('stopwords')
+    nltk.download('punkt')
+    nltk.download('averaged_perceptron_tagger')
+    nltk.download('wordnet')
+    nltk.download('maxent_ne_chunker')
+    nltk.download('words')
 except:
     raise ValueError("nltk download failed")
 
@@ -37,7 +37,7 @@ def preProcessing(string, debug=False):
     tokens = [w for w in tokens if not w.lower() in stop_words]
     if debug: print(tokens)
     stemmed = {}
-    # TODO: Fix spelling mistakes on input
+
     for w in tokens:
         if debug: print(w)
         a = lancaster.stem(spellcheck(w))
@@ -69,7 +69,7 @@ def spellcheck(word, distance_threshold=2, debug=False):
 def synonym_extractor(word):
     # create a dictionary of the original words and their synonyms
     synonyms = []
-    for syn in wordnet.synsets(word):
+    for syn in wordnet.synsets(word, lang='eng'):
         for l in syn.lemmas():
             a = lancaster.stem(l.name())
             if len(a) > 0:
