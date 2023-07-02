@@ -16,36 +16,39 @@ class ChatManager:
     def gotMessage(self, _id, text, username=None, name=None):
         if _id not in self.chats:
             self.newChat(_id, username, name)
+            if text != "/start":
+                self.chats[_id].start()
         if text == "/start":
             self.chats[_id].start()
+            self.sendMessage(_id, "Hello! I'm the Car Recommender Bot! 🚙\n\nPlease answer the following "
+                                             "questions to help me find the best car for you!")
             self.chats[_id].askQuestion()
         else:
             self.chats[_id].gotAnswer(text)
         # self.chats[_id].askQuestion()
 
-    def sendMessage(self, _id, text):
+    def sendMessage(self, _id, text="I encountered an error, please /start again 🤝"):
         url = f'https://api.telegram.org/bot{config.TELEGRAM_TOKEN}/sendMessage'
         payload = {
             'chat_id': _id,
             'text': text
         }
-        print("sending message: ", text if text is not None else "I encountered an error, please /start again 🤝")
+        print("sending message: ", text)
         r = requests.post(url, json=payload)
         return r
 
-    def sendImage(self, image_url, chat_id):
+    def sendImage(self, image_url, chat_id, caption=""):
         url = f'https://api.telegram.org/bot{config.TELEGRAM_TOKEN}/sendPhoto'
         payload = {
             'chat_id': chat_id,
             'photo': image_url,
-            'caption': ""
+            'caption': caption
         }
 
         r = requests.post(url, json=payload)
         return r
 
     def parseMessage(self, message):
-        # print("message-->", message)
         try:
             if not message:
                 raise ValueError("Empty message")
@@ -85,7 +88,6 @@ class UserChat:
             'imgDominantColor': 'imgDominantColorUndefined',
             'imgColorType': 'imgColorTypeUndefined'
         }
-        self.start()
 
     def start(self):
         self.q = rec.questions(self.debug, self)
@@ -97,9 +99,11 @@ class UserChat:
         question = self.q.ask()
         print("question: ", question)
         if question != "end":  # still asking
-            self.chatManager.sendMessage(self.id, question)
-            if self.endReached:
-                self.chatManager.sendMessage(self.id, "I hope you like my recommendation!\nIf you'd like to start again, type '/start'")
+            if question is None:
+                self.chatManager.sendMessage(self.id,
+                                             "Glad to help! 😎\nIf you'd like to start again, type '/start'")
+            else:
+                self.chatManager.sendMessage(self.id, question)
         else:  # got result, send it
             # self.chatManager.sendMessage(self.id, "Here are your results:")
             result = self.q.getResult()
@@ -138,4 +142,4 @@ class UserChat:
         gis = GoogleImagesSearch(config.GOOGLE_KEY, config.GOOGLE_CX)
         gis.search(search_params=self.searchParams)
         self.chatManager.sendImage(gis.results()[0].url, self.id)
-        self.endReached = True
+        #self.endReached = True
