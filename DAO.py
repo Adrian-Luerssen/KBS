@@ -164,7 +164,7 @@ class DAO:
                         weight[key + "_norm"] = 3
                     elif str(val).lower() == "any":
                         weight[key + "_norm"] = 1
-                        weight[key+"_norm"] = 0
+                        #weight[key + "_norm"] = 0
                     elif str(val).lower() == "low":
                         weight[key + "_norm"] = 0.5
                 # print(self.cars_test.keys())
@@ -185,9 +185,9 @@ class DAO:
             # print(matching_cars.columns.tolist())
             # print("filtering by", key, ":", value)
             if (value.replace(".", "").isnumeric()):
-                if key == "year":
-                    matching_cars = matching_cars[matching_cars[key] >= float(value)]
-                elif key == "price":
+                #if key == "year":
+                    #matching_cars = matching_cars[matching_cars[key] >= float(value)]
+                if key == "price":
                     matching_cars = matching_cars[matching_cars[key] <= float(value)]
                 elif key == "price_min":
                     matching_cars = matching_cars[matching_cars["price"] >= float(value)]
