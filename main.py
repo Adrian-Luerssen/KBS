@@ -10,21 +10,18 @@ from flask import Flask
 from flask import request
 from flask import Response
 from google_images_search import GoogleImagesSearch
-import requests
-import config
+
 import TelegramBot as telegramBot
+import config
 
 app = Flask(__name__)
 gis = GoogleImagesSearch(config.GOOGLE_KEY, config.GOOGLE_CX)
 
-import PreProcessing as pre
-import Recommendation as rec
-
-#q = rec.questions(debug=False)
-#q.askQuestions()
+# q = rec.questions(debug=False) # UNCOMMENT THIS LINE AND THE ONE BELOW TO TEST ON TERMINAL
+# q.askQuestions()               # WARNING: TERMINAL VERSION NOT FINAL - FULL FEATURED
 
 
-#def updateSearchParams(search_target):
+# def updateSearchParams(search_target):
 #    _search_params['q'] = search_target
 
 
@@ -37,6 +34,7 @@ with open('data/answers.json', 'a') as f:
     f.write("\n\n\n")
     f.close()
 
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -44,14 +42,12 @@ def index():
         print(msg)
         chat_id, txt, name, username = chatManager.parseMessage(msg)
         txt = txt.lower()
-        #print("FLUSHING")
-        #return Response('ok', status=200)
+        # print("FLUSHING")
+        # return Response('ok', status=200)
         if txt in {"hi", "hello", "howdy", "hola", "hey"}:
             # tel_send_message(chat_id, "Hello, world!")
-            chatManager.sendImage(config.BOT_LOGO, chat_id)
+            chatManager.sendImage(config.BOT_LOGO, chat_id, "Hi! To start, please use /start")
         elif txt == "/start":
-            chatManager.sendMessage(chat_id, "Hello! I'm the Car Recommender Bot!\n\nPlease answer the following "
-                                             "questions to help me find the best car for you!")
             chatManager.gotMessage(chat_id, txt, name, username)
         else:
             chatManager.gotMessage(chat_id, txt, name, username)
